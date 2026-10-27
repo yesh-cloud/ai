@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acumen International - ERP & Management System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SheetJS: Excel (.xlsx/.xls) import; CSV import also works without this library -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+      if (window.tailwind) window.tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f0ff',
+                            100: '#e1e0ff',
+                            500: '#5c3cff',
+                            600: '#4a2be8',
+                            700: '#381cc7',
+                            800: '#2b14a3',
+                            900: '#1b0c70'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .sidebar-item-active { background: linear-gradient(90deg, rgba(92,60,255,0.15) 0%, rgba(92,60,255,0.02) 100%); border-left: 4px solid #5c3cff; color: #5c3cff; font-weight: 600; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; }
+        }
+    </style>
+
+    <style id="offline-fallback-styles">
+      /* Core layout and utility fallback: the app remains usable when external CDNs are offline. */
+      *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1e293b;background:#f8fafc}
+      .hidden{display:none!important}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.block{display:block}.inline-block{display:inline-block}
+      .flex-col{flex-direction:column}.flex-row{flex-direction:row}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.flex-wrap{flex-wrap:wrap}
+      .items-center{align-items:center}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}
+      .w-full{width:100%}.w-screen{width:100vw}.h-full{height:100%}.h-screen{height:100vh}.min-w-0{min-width:0}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.overflow-x-auto{overflow-x:auto}
+      .relative{position:relative}.absolute{position:absolute}.fixed{position:fixed}.inset-0{top:0;right:0;bottom:0;left:0}.top-5{top:1.25rem}.right-5{right:1.25rem}.z-30{z-index:30}.z-50{z-index:50}.z-\[100\]{z-index:100}
+      .mx-auto{margin-left:auto;margin-right:auto}.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.my-3{margin-top:.75rem;margin-bottom:.75rem}.mx-3{margin-left:.75rem;margin-right:.75rem}
+      .p-1{padding:.25rem}.p-1\.5{padding:.375rem}.p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-7{padding:1.75rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}
+      .gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.space-y-1>*+*{margin-top:.25rem}.space-y-2>*+*{margin-top:.5rem}.space-y-3>*+*{margin-top:.75rem}.space-y-4>*+*{margin-top:1rem}
+      .w-64{width:16rem}.w-10{width:2.5rem}.w-8{width:2rem}.h-10{height:2.5rem}.h-8{height:2rem}.h-14{height:3.5rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.max-w-\[calc\(100vw-2rem\)\]{max-width:calc(100vw - 2rem)}
+      .rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}
+      .border{border:1px solid #e2e8f0}.border-b{border-bottom:1px solid #e2e8f0}.border-r{border-right:1px solid #e2e8f0}.border-t{border-top:1px solid #e2e8f0}
+      .bg-white{background:#fff}.bg-slate-50{background:#f8fafc}.bg-slate-100{background:#f1f5f9}.bg-slate-900{background:#0f172a}.bg-slate-950{background:#020617}.bg-brand-500,.bg-brand-600{background:#5c3cff}.bg-rose-600{background:#e11d48}.bg-emerald-100{background:#d1fae5}.bg-amber-100{background:#fef3c7}
+      .text-white{color:#fff}.text-slate-400{color:#94a3b8}.text-slate-500{color:#64748b}.text-slate-600{color:#475569}.text-slate-700{color:#334155}.text-slate-800{color:#1e293b}.text-slate-900{color:#0f172a}.text-brand-500,.text-brand-600,.text-brand-700{color:#5c3cff}.text-rose-600{color:#e11d48}.text-emerald-700{color:#047857}.text-amber-700{color:#b45309}
+      .text-xs{font-size:.75rem;line-height:1rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.text-center{text-align:center}.text-right{text-align:right}.uppercase{text-transform:uppercase}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .shadow-sm{box-shadow:0 1px 2px #00000012}.shadow-lg,.shadow-xl,.shadow-2xl{box-shadow:0 10px 25px #0f172a1c}.cursor-pointer{cursor:pointer}.pointer-events-none{pointer-events:none}.transition{transition:all .15s ease}.transition-all{transition:all .15s ease}
+      button,input,select,textarea{font:inherit} button{cursor:pointer;border:0} input,select,textarea{max-width:100%;border:1px solid #cbd5e1;border-radius:.6rem;padding:.6rem;background:white;color:#1e293b} button:focus,input:focus,select:focus,textarea:focus{outline:2px solid #a5b4fc;outline-offset:1px}
+      table{border-collapse:collapse;width:100%} th,td{border-bottom:1px solid #e2e8f0;text-align:left;padding:.65rem;vertical-align:middle} .sidebar-item-active{background:#f0f0ff;border-left:4px solid #5c3cff;color:#5c3cff;font-weight:700}
+      #sidebar{min-width:15rem;background:white} #main-content{min-width:0;flex:1;overflow:auto} .tab-content{padding:1rem} .modal,.fixed.inset-0{z-index:100} canvas{max-width:100%}
+      @media(max-width:700px){#sidebar{width:12rem;min-width:12rem}.tab-content{padding:.6rem}.grid{grid-template-columns:1fr!important}.w-64{width:12rem}.text-2xl{font-size:1.25rem}table{font-size:.75rem}}
+    </style>
+
+<style>
+@media print { body { background:#fff !important; } #sidebar, header, #toast-container, #login-screen, button, .no-print { display:none !important; } main { width:100% !important; height:auto !important; overflow:visible !important; } #main-content { overflow:visible !important; padding:0 !important; } .tab-content.hidden { display:none !important; } .tab-content:not(.hidden) { display:block !important; } .overflow-x-auto { overflow:visible !important; } table { width:100% !important; font-size:10pt !important; } tr { break-inside:avoid; } }
+</style>
+<style id="responsive-app-layout">
+/* Responsive layout: touch-friendly phones, tablets and wide desktop screens */
+html,body{width:100%;min-height:100%;}
+body{min-height:100dvh;}
+#main-content{overscroll-behavior:contain;scrollbar-gutter:stable;}
+.tab-content{min-width:0;max-width:100%;}
+.tab-content > *{min-width:0;}
+.overflow-x-auto{max-width:100%;-webkit-overflow-scrolling:touch;}
+table{min-width:560px;}
+input,select,textarea{min-width:0;}
+button{touch-action:manipulation;}
+.sidebar-backdrop{display:none;}
+@media (min-width:701px){#sidebar.desktop-sidebar-collapsed{display:none!important}}
+@media (min-width:1200px){#main-content{padding:1.75rem!important}.tab-content{padding:1.25rem!important}}
+@media (max-width:900px){
+  body{height:100dvh;overflow:hidden;}
+  #sidebar{width:17rem;min-width:17rem;}
+  #main-content{padding:1rem!important;}
+  header{padding-left:1rem!important;padding-right:1rem!important;gap:.5rem;}
+  header #page-subtitle{max-width:45vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+}
+@media (max-width:700px){
+  #sidebar{position:fixed!important;inset:0 auto 0 0;height:100dvh;width:min(84vw,320px)!important;min-width:0!important;max-width:320px;transform:translateX(-105%);transition:transform .24s ease;z-index:120;box-shadow:none;}
+  #sidebar.mobile-sidebar-open{transform:translateX(0);box-shadow:12px 0 35px rgba(15,23,42,.18);}
+  .sidebar-backdrop{display:block;position:fixed;inset:0;background:rgba(15,23,42,.48);opacity:0;visibility:hidden;z-index:110;transition:opacity .2s ease;}
+  .sidebar-backdrop.is-visible{opacity:1;visibility:visible;}
+  main{min-width:0;width:100%;}
+  header{height:auto!important;min-height:64px;padding:.65rem .75rem!important;align-items:center;}
+  header>div:first-child{min-width:0;gap:.45rem!important;}
+  header #page-title{font-size:1rem;line-height:1.3;}
+  header #page-subtitle{display:none;}
+  header .flex.items-center.gap-2{gap:.35rem!important;}
+  #main-content{padding:.65rem!important;width:100%;}
+  .tab-content{padding:.25rem!important;}
+  .tab-content .grid{grid-template-columns:minmax(0,1fr)!important;}
+  .tab-content [class*="grid-cols-"]{grid-template-columns:minmax(0,1fr)!important;}
+  .tab-content .flex.items-center.justify-between{gap:.6rem;flex-wrap:wrap;}
+  .tab-content h1,.tab-content h2{overflow-wrap:anywhere;}
+  .tab-content .p-6{padding:1rem!important;}
+  .tab-content .p-5{padding:.9rem!important;}
+  .tab-content .p-4{padding:.75rem!important;}
+  .tab-content .text-2xl{font-size:1.25rem!important;line-height:1.6rem!important;}
+  .tab-content button,.tab-content input,.tab-content select,.tab-content textarea{max-width:100%;}
+  .tab-content form .grid{grid-template-columns:minmax(0,1fr)!important;}
+  .modal>div,.fixed.inset-0>div{max-width:calc(100vw - 1rem)!important;max-height:calc(100dvh - 1rem);overflow-y:auto;}
+  #toast-container{right:.5rem!important;left:.5rem!important;top:.5rem!important;width:auto!important;max-width:none!important;}
+  #login-screen{padding:1rem!important;overflow-y:auto;}
+  #login-screen>div{padding:1.25rem!important;}
+  table{font-size:.78rem;min-width:600px;}
+  th,td{padding:.5rem!important;white-space:normal;}
+}
+@media (max-width:380px){
+  header #page-title{font-size:.9rem;}
+  header button{padding:.45rem!important;}
+  #main-content{padding:.5rem!important;}
+  .tab-content .rounded-2xl{border-radius:.8rem!important;}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased h-screen overflow-hidden flex">
+
+    <!-- Local prototype sign-in. Production authentication requires a server. -->
+    <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950 p-4">
+      <div class="w-full max-w-md rounded-3xl bg-white p-7 shadow-2xl">
+        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-500 text-2xl text-white"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h1 class="text-center text-2xl font-extrabold text-slate-900">Acumen International</h1>
+        <p class="mb-6 mt-1 text-center text-sm text-slate-500">Institute Management Portal</p>
+        <form id="login-form" class="space-y-4" onsubmit="loginUser(event)">
+          <div><label class="mb-1 block text-sm font-semibold">Login as</label><select id="login-role" class="w-full rounded-xl border border-slate-200 p-3"><option value="Admin">Administrator</option><option value="Staff">Staff member</option><option value="Teacher">Teacher</option></select></div>
+          <div><label class="mb-1 block text-sm font-semibold">Username</label><input id="login-username" class="w-full rounded-xl border border-slate-200 p-3" autocomplete="username" required placeholder="Enter username"></div>
+          <div><label class="mb-1 block text-sm font-semibold">Password</label><input id="login-password" type="password" class="w-full rounded-xl border border-slate-200 p-3" autocomplete="current-password" required placeholder="Enter password"></div>
+          <p id="login-error" class="hidden text-sm text-rose-600">Invalid username or password.</p>
+          <button class="w-full rounded-xl bg-brand-600 p-3 font-bold text-white hover:bg-brand-700" type="submit">Sign in securely</button>
+        </form>
+        <p class="mt-5 text-center text-xs text-slate-500">Authorized users only · Acumen International</p>
+      </div>
+    </div>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="flex h-full w-full overflow-hidden">
+
+        <!-- Mobile navigation backdrop -->
+        <button id="sidebar-backdrop" class="sidebar-backdrop" aria-label="Close navigation" onclick="toggleSidebar(false)"></button>
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="w-64 bg-white border-r border-slate-200 flex flex-col flex-shrink-0 transition-all duration-300 z-30">
+            <!-- Brand Header -->
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-slate-800 leading-tight text-base" id="brand-title">Acumen</h1>
+                        <p class="text-xs text-brand-500 font-semibold tracking-wide uppercase" id="brand-subtitle">Spoken English</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Switcher & Info -->
+            <div class="p-4 mx-3 my-3 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold uppercase text-slate-400">Current Session</span>
+                    <span id="role-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-100 text-brand-700">ADMIN</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <div id="user-avatar" class="w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-xs flex items-center justify-center flex-shrink-0">
+                            AD
+                        </div>
+                        <div class="truncate">
+                            <p id="user-name" class="text-sm font-semibold text-slate-800 truncate">Administrator</p>
+                            <p id="user-role-label" class="text-xs text-slate-500 truncate">Super Master Admin</p>
+                        </div>
+                    </div>
+                    <button onclick="logoutUser()" title="Sign out" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg" aria-label="Sign out"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 overflow-y-auto custom-scrollbar px-3 space-y-1">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+                    <span>Dashboard</span>
+                </button>
+
+                <button onclick="switchTab('students')" id="nav-students" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-user-graduate w-5 text-center"></i>
+                    <span>Students Directory</span>
+                </button>
+
+                <button onclick="switchTab('curriculum')" id="nav-curriculum" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-book-open w-5 text-center"></i>
+                    <span>Curriculum & Grades</span>
+                </button>
+
+                <button onclick="switchTab('exams')" id="nav-exams" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-award w-5 text-center"></i>
+                    <span>Exams & Medals</span>
+                </button>
+
+                <button onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-boxes-stacked w-5 text-center"></i>
+                    <span>Stock & Inventory</span>
+                </button>
+
+                <button onclick="switchTab('finance')" id="nav-finance" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-wallet w-5 text-center"></i>
+                    <span>Financial Accounts</span>
+                </button>
+
+                <button onclick="switchTab('events')" id="nav-events" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-calendar-star w-5 text-center"></i>
+                    <span>Events & Budgets</span>
+                </button>
+
+                <button onclick="switchTab('courier')" id="nav-courier" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-truck-fast w-5 text-center"></i>
+                    <span>Courier Logistics</span>
+                </button>
+
+                <button onclick="switchTab('files')" id="nav-files" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-folder-open w-5 text-center"></i>
+                    <span>File Hub</span>
+                </button>
+
+                <div class="pt-3 pb-1">
+                    <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider">System Master</p>
+                </div>
+
+                <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-gears w-5 text-center"></i>
+                    <span>Master Config & Admin</span>
+                </button>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-slate-100 text-xs text-slate-400 text-center">
+                <p>Acumen ERP v4.5 Enterprise</p>
+                <p class="text-[10px] mt-0.5">© <span id="current-year">2026</span> Acumen Intl.</p>
+            </div>
+        </aside>
+
+        <!-- CONTENT AREA -->
+        <main class="flex-1 flex flex-col h-full min-w-0 bg-slate-50">
+
+            <!-- TOP NAVBAR -->
+            <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="text-slate-500 hover:text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <div>
+                        <h2 id="page-title" class="text-lg font-bold text-slate-800">Executive Dashboard</h2>
+                        <p id="page-subtitle" class="text-xs text-slate-500">Real-time institute analytics & operations summary</p>
+                    </div>
+                </div>
+
+                <!-- Right Action Bar -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <span id="connection-status" class="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1.5 text-[11px] font-bold text-emerald-700"><span class="h-2 w-2 rounded-full bg-emerald-500"></span> Offline-ready</span>
+                    <button onclick="exportFullJSON()" title="Download backup" class="admin-only p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50" aria-label="Download backup"><i class="fa-solid fa-download"></i></button>
+                    <button onclick="printCurrentReport()" title="Print current page" class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50" aria-label="Print report"><i class="fa-solid fa-print"></i></button>
+                    <!-- Quick Add Button (Admin Only Dynamic) -->
+                    <div id="quick-add-wrapper" class="relative">
+                        <button onclick="toggleQuickAddMenu()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                            <i class="fa-solid fa-plus"></i>
+                            <span class="hidden sm:inline">Quick Action</span>
+                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <!-- Quick Add Dropdown Menu -->
+                        <div id="quick-add-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50">
+                            <button onclick="openAddStudentModal()" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-brand-50 flex items-center gap-2">
+                                <i class="fa-solid fa-user-plus text-brand-500"></i> Register Student
+                            </button>
+                            <button onclick="openAddTransactionModal()" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-brand-50 flex items-center gap-2">
+                                <i class="fa-solid fa-receipt text-emerald-500"></i> Add Transaction
+                            </button>
+                            <button onclick="openAddStockModal()" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-brand-50 flex items-center gap-2">
+                                <i class="fa-solid fa-box text-amber-500"></i> Add Stock Item
+                            </button>
+                            <button onclick="openAddCourseModal()" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-brand-50 flex items-center gap-2">
+                                <i class="fa-solid fa-book text-indigo-500"></i> Add Course/Grade
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Role Status Indicator -->
+                    <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-full text-xs font-medium text-slate-600">
+                        <span id="role-indicator-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span id="role-status-text">Admin Mode (Full Editing)</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- SCROLLABLE PAGE BODY -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-6" id="main-content">
+
+                <!-- 1. DASHBOARD TAB -->
+                <div id="tab-dashboard" class="tab-content space-y-6">
+                    <!-- Key KPI Metrics Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Total Enrolled</p>
+                                <h3 id="dash-total-students" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                                <p class="text-xs text-emerald-600 font-semibold mt-1 flex items-center gap-1">
+                                    <i class="fa-solid fa-arrow-trend-up"></i> Active Scholars
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Financial Balance</p>
+                                <h3 id="dash-cash-balance" class="text-2xl font-bold text-slate-800 mt-1">LKR 0</h3>
+                                <p id="dash-cash-subtitle" class="text-xs text-slate-500 mt-1">Net Cashflow</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Medals Awarded</p>
+                                <h3 id="dash-medals-awarded" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                                <p class="text-xs text-amber-600 font-semibold mt-1">Gold/Silver/Bronze</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-medal"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Low Stock Alerts</p>
+                                <h3 id="dash-low-stock" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                                <p id="dash-stock-status" class="text-xs text-red-500 font-semibold mt-1">Requires Reorder</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts & Active Quick Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Grade Distribution Chart -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm lg:col-span-2">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Student Enrolment Spread</h4>
+                                    <p class="text-xs text-slate-500">Active student counts across grades & steps</p>
+                                </div>
+                                <span class="px-2.5 py-1 text-xs bg-slate-100 font-semibold text-slate-600 rounded-lg">Grade 01 - 08</span>
+                            </div>
+                            <div class="h-64 relative">
+                                <canvas id="gradeChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Quick Overview & Admin Powers Banner -->
+                        <div class="space-y-4">
+                            <!-- Admin Notice Box -->
+                            <div class="bg-gradient-to-br from-brand-600 to-brand-800 text-white p-5 rounded-2xl shadow-md relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <span class="px-2.5 py-0.5 rounded-full bg-white/20 text-[11px] font-bold uppercase tracking-wide">Admin Powers Active</span>
+                                    <h4 class="font-bold text-lg mt-2">Full Master Capability</h4>
+                                    <p class="text-xs text-brand-100 mt-1 leading-relaxed">
+                                        You have full authorization to edit, add, delete or reconfigure courses, steps, grades, exam rubrics, inventory items, transactions, and event budgets.
+                                    </p>
+                                    <button onclick="switchTab('settings')" class="mt-4 px-4 py-2 bg-white text-brand-700 hover:bg-brand-50 rounded-xl text-xs font-bold transition shadow-sm">
+                                        Open Master Config
+                                    </button>
+                                </div>
+                                <i class="fa-solid fa-shield-halved text-white/10 text-8xl absolute -right-2 -bottom-2"></i>
+                            </div>
+
+                            <!-- Recent System Activities -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                                <h4 class="font-bold text-slate-800 text-sm mb-3">System Quick Stats</h4>
+                                <div class="space-y-3 text-xs">
+                                    <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+                                        <span class="text-slate-500">Step Books & Cards Stock</span>
+                                        <span id="dash-total-books-count" class="font-bold text-slate-700">0 units</span>
+                                    </div>
+                                    <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+                                        <span class="text-slate-500">Active Events Budget</span>
+                                        <span id="dash-event-budget" class="font-bold text-slate-700">LKR 0</span>
+                                    </div>
+                                    <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+                                        <span class="text-slate-500">Pending Couriers</span>
+                                        <span id="dash-pending-couriers" class="font-bold text-amber-600">0 shipments</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. STUDENTS DIRECTORY TAB -->
+                <div id="tab-students" class="tab-content hidden space-y-6">
+                    <!-- Top Action Bar -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                            <!-- Search -->
+                            <div class="relative flex-1 md:w-64">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                                <input type="text" id="student-search" oninput="renderStudentsTable()" placeholder="Search name, index, phone..." class="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                            </div>
+                            <!-- Grade Filter -->
+                            <select id="student-grade-filter" onchange="renderStudentsTable()" class="py-2 px-3 text-xs border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white">
+                                <option value="">All Grades</option>
+                            </select>
+                            <!-- Step Filter -->
+                            <select id="student-step-filter" onchange="renderStudentsTable()" class="py-2 px-3 text-xs border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white">
+                                <option value="">All Steps</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+                            <button onclick="downloadStudentImportTemplate()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
+                                <i class="fa-solid fa-file-arrow-down"></i> Excel Template
+                            </button>
+                            <button onclick="document.getElementById('student-bulk-file').click()" class="admin-only px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
+                                <i class="fa-solid fa-file-import"></i> Bulk Import
+                            </button>
+                            <input id="student-bulk-file" type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleStudentBulkImport(event)">
+                            <button onclick="exportStudentsCSV()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
+                                <i class="fa-solid fa-file-csv"></i> Export
+                            </button>
+                            <button onclick="openAddStudentModal()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                                <i class="fa-solid fa-plus"></i> New Enrolment
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Students Table Container -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase tracking-wider">
+                                    <tr>
+                                        <th class="p-4">Student Info</th>
+                                        <th class="p-4">Grade & Step</th>
+                                        <th class="p-4">Contact & Guardian</th>
+                                        <th class="p-4">Fee Status</th>
+                                        <th class="p-4">Spoken/Written Marks</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body" class="divide-y divide-slate-100 text-slate-700">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. CURRICULUM & GRADES TAB -->
+                <div id="tab-curriculum" class="tab-content hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Curriculum & Grade Master</h3>
+                            <p class="text-xs text-slate-500">Configure Steps 01-04, Poem Cards, and Grade Rules</p>
+                        </div>
+                        <button onclick="openAddCourseModal()" class="admin-only px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                            <i class="fa-solid fa-plus"></i> Add Grade / Step Level
+                        </button>
+                    </div>
+
+                    <!-- Curriculum Grid -->
+                    <div id="curriculum-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Dynamic Cards -->
+                    </div>
+                </div>
+
+                <!-- 4. EXAMS & MEDALS TAB -->
+                <div id="tab-exams" class="tab-content hidden space-y-6">
+                    <!-- Dynamic Exam Configuration Header -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800">Exam Rules & Medal Criteria</h3>
+                            <p class="text-xs text-slate-500">Pass Marks & Automatic Thresholds for Medals</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-lg border border-amber-200 flex items-center gap-1">
+                                <i class="fa-solid fa-award"></i> Gold: <span id="gold-threshold-text">85%</span>+
+                            </span>
+                            <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 flex items-center gap-1">
+                                <i class="fa-solid fa-award"></i> Silver: <span id="silver-threshold-text">75%</span>+
+                            </span>
+                            <span class="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-bold rounded-lg border border-orange-200 flex items-center gap-1">
+                                <i class="fa-solid fa-award"></i> Bronze: <span id="bronze-threshold-text">65%</span>+
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Exam Marks Ledger -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                        <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+                            <h4 class="font-bold text-slate-800 text-sm">Student Examination Records</h4>
+                            <span class="text-xs text-slate-400">Click 'Record Mark' to evaluate</span>
+                        </div>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase">
+                                    <tr>
+                                        <th class="p-4">Student</th>
+                                        <th class="p-4">Grade / Step</th>
+                                        <th class="p-4">Written Exam</th>
+                                        <th class="p-4">Spoken Poem Exam</th>
+                                        <th class="p-4">Avg Score</th>
+                                        <th class="p-4">Medal Awarded</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="exam-records-table-body" class="divide-y divide-slate-100">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. STOCK & INVENTORY TAB -->
+                <div id="tab-inventory" class="tab-content hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800">Inventory & Material Ledger</h3>
+                            <p class="text-xs text-slate-500">Track Step Books, Poem Cards, Medals & Certificates</p>
+                        </div>
+                        <button onclick="openAddStockModal()" class="admin-only px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                            <i class="fa-solid fa-plus"></i> Add New Item
+                        </button>
+                    </div>
+
+                    <!-- Inventory Table -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase">
+                                    <tr>
+                                        <th class="p-4">Item Code & Name</th>
+                                        <th class="p-4">Category</th>
+                                        <th class="p-4">Current Stock</th>
+                                        <th class="p-4">Reorder Threshold</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Stock Management</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table-body" class="divide-y divide-slate-100">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. FINANCIAL ACCOUNTS TAB -->
+                <div id="tab-finance" class="tab-content hidden space-y-6">
+                    <!-- Finance Summary Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                            <p class="text-xs text-slate-500 font-medium">Total Income / Fees</p>
+                            <h3 id="finance-total-income" class="text-2xl font-bold text-emerald-600 mt-1">LKR 0</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                            <p class="text-xs text-slate-500 font-medium">Total Operating Expense</p>
+                            <h3 id="finance-total-expense" class="text-2xl font-bold text-rose-600 mt-1">LKR 0</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                            <p class="text-xs text-slate-500 font-medium">Net Operational Profit</p>
+                            <h3 id="finance-net-balance" class="text-2xl font-bold text-brand-600 mt-1">LKR 0</h3>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm">Income & Expense Cash Book</h4>
+                        <button onclick="openAddTransactionModal()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                            <i class="fa-solid fa-plus"></i> Add Transaction Entry
+                        </button>
+                    </div>
+
+                    <!-- Transactions Table -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase">
+                                    <tr>
+                                        <th class="p-4">Date</th>
+                                        <th class="p-4">Description</th>
+                                        <th class="p-4">Category</th>
+                                        <th class="p-4">Type</th>
+                                        <th class="p-4">Amount (LKR)</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="finance-table-body" class="divide-y divide-slate-100">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. EVENTS & BUDGETS TAB -->
+                <div id="tab-events" class="tab-content hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800">Institute Events & Speech Contests</h3>
+                            <p class="text-xs text-slate-500">Track Event Budgets, Registrations & Expense Balances</p>
+                        </div>
+                        <button onclick="openAddEventModal()" class="admin-only px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                            <i class="fa-solid fa-plus"></i> Create New Event
+                        </button>
+                    </div>
+
+                    <!-- Events Cards Container -->
+                    <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Dynamic Events -->
+                    </div>
+                </div>
+
+                <!-- 8. COURIER LOGISTICS TAB -->
+                <div id="tab-courier" class="tab-content hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800">Courier Logistics & Book Dispatch</h3>
+                            <p class="text-xs text-slate-500">Waybills, Certificate Shipments & Delivery Tracking</p>
+                        </div>
+                        <button onclick="openAddCourierModal()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                            <i class="fa-solid fa-plus"></i> New Waybill Entry
+                        </button>
+                    </div>
+
+                    <!-- Courier Table -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase">
+                                    <tr>
+                                        <th class="p-4">Waybill #</th>
+                                        <th class="p-4">Recipient Student</th>
+                                        <th class="p-4">Items Included</th>
+                                        <th class="p-4">Courier Service</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="courier-table-body" class="divide-y divide-slate-100">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. FILE HUB TAB -->
+                <div id="tab-files" class="tab-content hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800">Institute Document Repository</h3>
+                            <p class="text-xs text-slate-500">Syllabus Copies, Exam Papers, Forms & Student Uploads</p>
+                        </div>
+                        <button onclick="openUploadFileModal()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Document
+                        </button>
+                    </div>
+
+                    <!-- Documents Grid -->
+                    <div id="files-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <!-- Dynamic File Cards -->
+                    </div>
+                </div>
+
+                <!-- 10. MASTER CONFIG & ADMIN TAB -->
+                <div id="tab-settings" class="tab-content hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">System Master Configuration</h3>
+                            <p class="text-xs text-slate-500">Customize global variables, exam rubrics, system dropdown options, and user access roles</p>
+                        </div>
+
+                        <!-- System Settings Sub-Tabs -->
+                        <div class="border-b border-slate-200 flex gap-4 text-xs font-semibold">
+                            <button onclick="switchConfigSubTab('general')" id="cfg-btn-general" class="pb-2 text-brand-600 border-b-2 border-brand-600">General Branding</button>
+                            <button onclick="switchConfigSubTab('thresholds')" id="cfg-btn-thresholds" class="pb-2 text-slate-500 border-b-2 border-transparent hover:text-slate-700">Exam & Medal Thresholds</button>
+                            <button onclick="switchConfigSubTab('users')" id="cfg-btn-users" class="pb-2 text-slate-500 border-b-2 border-transparent hover:text-slate-700">System Users & Roles</button>
+                            <button onclick="switchConfigSubTab('backup')" id="cfg-btn-backup" class="pb-2 text-slate-500 border-b-2 border-transparent hover:text-slate-700">Data Backup & Export</button>
+                        </div>
+
+                        <!-- General Branding Form -->
+                        <div id="cfg-sub-general" class="cfg-sub-content space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-slate-700 mb-1">Institute Name</label>
+                                    <input type="text" id="cfg-company-name" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-700 mb-1">Tagline / Subtitle</label>
+                                    <input type="text" id="cfg-company-subtitle" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-700 mb-1">Currency Symbol</label>
+                                    <input type="text" id="cfg-currency-symbol" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-700 mb-1">Contact Phone</label>
+                                    <input type="text" id="cfg-contact-phone" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                                </div>
+                            </div>
+                            <button onclick="saveGeneralConfig()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold">Save System Branding</button>
+                        </div>
+
+                        <!-- Thresholds Config -->
+                        <div id="cfg-sub-thresholds" class="cfg-sub-content hidden space-y-4">
+                            <p class="text-xs text-slate-500">Set pass percentages for automatic medal recognition in exams:</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                                <div>
+                                    <label class="block font-semibold text-amber-600 mb-1">Gold Medal Min Score (%)</label>
+                                    <input type="number" id="cfg-gold-mark" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Silver Medal Min Score (%)</label>
+                                    <input type="number" id="cfg-silver-mark" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-orange-600 mb-1">Bronze Medal Min Score (%)</label>
+                                    <input type="number" id="cfg-bronze-mark" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                                </div>
+                            </div>
+                            <button onclick="saveThresholdsConfig()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold">Update Criteria</button>
+                        </div>
+
+                        <!-- System Users -->
+                        <div id="cfg-sub-users" class="cfg-sub-content hidden space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-slate-800 text-xs">Authorized ERP Users</h4>
+                                <button onclick="openAddUserModal()" class="px-3 py-1.5 bg-slate-800 text-white text-xs font-semibold rounded-lg">Add User</button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="bg-slate-50 border-b border-slate-200">
+                                        <tr>
+                                            <th class="p-3">User Name</th>
+                                            <th class="p-3">Username</th>
+                                            <th class="p-3">Role</th>
+                                            <th class="p-3">Status</th>
+                                            <th class="p-3 text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-table-body" class="divide-y divide-slate-100">
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Backup & Data Export -->
+                        <div id="cfg-sub-backup" class="cfg-sub-content hidden space-y-4 text-xs">
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                <h4 class="font-bold text-slate-800">Database Export & Reset</h4>
+                                <p class="text-slate-500 mt-1">Export your complete Acumen ERP dataset as JSON or restore factory sample data.</p>
+                                <div class="flex flex-wrap gap-3 mt-4">
+                                    <button onclick="exportFullJSON()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl">
+                                        <i class="fa-solid fa-download mr-1"></i> Export Full JSON
+                                    </button>
+                                    <button onclick="resetToDemoData()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl">
+                                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset Factory Demo
+                                    </button>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-200">
+                                    <div class="mb-3 text-xs text-slate-500">Local persistence: <strong id="last-saved-label">Changes save in this browser</strong></div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button onclick="runDataCheck()" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"><i class="fa-solid fa-shield-halved mr-1"></i> Check Data</button>
+                                        <button onclick="exportFinanceCSV()" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"><i class="fa-solid fa-file-csv mr-1"></i> Finance CSV</button>
+                                        <button onclick="exportInventoryCSV()" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold"><i class="fa-solid fa-boxes-stacked mr-1"></i> Stock CSV</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALS CONTAINER -->
+
+    <!-- Modal 1: Add/Edit Student Modal -->
+    <div id="modal-student" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 id="modal-student-title" class="font-bold text-slate-800 text-sm">Register New Student</h3>
+                <button onclick="closeModal('modal-student')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-student" onsubmit="handleSaveStudent(event)" class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs">
+                <input type="hidden" id="student-edit-id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Index Number *</label>
+                        <input type="text" id="student-index" required placeholder="ACM-2026-001" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Full Name *</label>
+                        <input type="text" id="student-name" required placeholder="Kavindu Perera" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Grade Level *</label>
+                        <select id="student-grade" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white"></select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Curriculum Step *</label>
+                        <select id="student-step" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white"></select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Guardian Name</label>
+                        <input type="text" id="student-guardian" placeholder="Nimal Perera" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Contact Mobile *</label>
+                        <input type="text" id="student-phone" required placeholder="0771234567" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Assigned Teacher</label>
+                        <select id="student-teacher" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white"><option value="">Unassigned</option></select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Fee Status</label>
+                        <select id="student-fee" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white">
+                            <option value="Paid">Paid Fully</option>
+                            <option value="Pending">Payment Pending</option>
+                            <option value="Partial">Partial Paid</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Courier Delivery Address</label>
+                        <input type="text" id="student-address" placeholder="No. 12, Main St, Colombo" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Academic & Behavioral Notes</label>
+                    <textarea id="student-notes" rows="2" placeholder="Student profile details, special requirements..." class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-student')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Save Student Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Add/Edit Course/Grade Modal -->
+    <div id="modal-course" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 id="modal-course-title" class="font-bold text-slate-800 text-sm">Add Curriculum Grade</h3>
+                <button onclick="closeModal('modal-course')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-course" onsubmit="handleSaveCourse(event)" class="p-6 space-y-4 text-xs">
+                <input type="hidden" id="course-edit-id">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Grade Title *</label>
+                    <input type="text" id="course-title" required placeholder="Grade 01 / Step 01" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Step Book Included</label>
+                    <input type="text" id="course-step-book" placeholder="Step 01 Spoken English Book" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Poem Cards Level</label>
+                    <input type="text" id="course-poem-card" placeholder="Poem Card Set A (12 Cards)" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Monthly Course Fee (LKR)</label>
+                    <input type="number" id="course-fee" required placeholder="3500" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-course')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Save Grade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Record Exam Marks Modal -->
+    <div id="modal-exam-mark" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm">Record Examination Score</h3>
+                <button onclick="closeModal('modal-exam-mark')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-exam-mark" onsubmit="handleSaveExamMark(event)" class="p-6 space-y-4 text-xs">
+                <input type="hidden" id="exam-student-id">
+                <div class="p-3 bg-brand-50 rounded-xl text-brand-800 font-medium">
+                    <p id="exam-student-label">Student: Kavindu Perera</p>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Written Paper Mark (0 - 100) *</label>
+                    <input type="number" id="exam-written" min="0" max="100" required placeholder="85" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Spoken / Poem Exam Mark (0 - 100) *</label>
+                    <input type="number" id="exam-spoken" min="0" max="100" required placeholder="90" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-600 text-[11px]">
+                    <i class="fa-solid fa-info-circle mr-1 text-brand-500"></i> Medals are calculated based on overall average score.
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-exam-mark')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Calculate & Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 4: Add Inventory Item Modal -->
+    <div id="modal-stock" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 id="modal-stock-title" class="font-bold text-slate-800 text-sm">Add Stock Item</h3>
+                <button onclick="closeModal('modal-stock')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-stock" onsubmit="handleSaveStock(event)" class="p-6 space-y-4 text-xs">
+                <input type="hidden" id="stock-edit-id">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Item Code *</label>
+                    <input type="text" id="stock-code" required placeholder="BK-STEP-01" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Item Name *</label>
+                    <input type="text" id="stock-name" required placeholder="Step 01 Workbook" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Category</label>
+                    <select id="stock-category" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white">
+                        <option value="Books">Step Books</option>
+                        <option value="Poem Cards">Poem Cards</option>
+                        <option value="Medals">Medals & Ribbons</option>
+                        <option value="Certificates">Certificates</option>
+                        <option value="Stationery">Stationery</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Quantity in Stock *</label>
+                        <input type="number" id="stock-qty" required placeholder="100" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Reorder Threshold *</label>
+                        <input type="number" id="stock-reorder" required placeholder="20" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-stock')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 5: Financial Transaction Modal -->
+    <div id="modal-finance" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm">Add Financial Transaction</h3>
+                <button onclick="closeModal('modal-finance')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-finance" onsubmit="handleSaveTransaction(event)" class="p-6 space-y-4 text-xs"><input type="hidden" id="fin-edit-id">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Type *</label>
+                    <select id="fin-type" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white">
+                        <option value="Income">Income (Course Fee, Sales)</option>
+                        <option value="Expense">Expense (Printing, Courier, Rent)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Description *</label>
+                    <input type="text" id="fin-desc" required placeholder="Course Fee Payment - ACM-001" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Category</label>
+                    <input type="text" id="fin-category" placeholder="Student Fees / Book Printing" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Amount (LKR) *</label>
+                    <input type="number" id="fin-amount" required placeholder="3500" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-finance')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Post Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 6: Printable Certificate Preview Modal -->
+    <div id="modal-certificate" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 no-print">
+                <h3 class="font-bold text-slate-800 text-sm">Official Certificate Preview</h3>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.print()" class="px-3.5 py-1.5 bg-brand-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-print"></i> Print Certificate
+                    </button>
+                    <button onclick="closeModal('modal-certificate')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+            </div>
+
+            <!-- CERTIFICATE DISPLAY AREA -->
+            <div class="p-8 overflow-y-auto flex-1 flex items-center justify-center bg-slate-100">
+                <div id="cert-print-area" class="w-full max-w-2xl bg-white p-10 border-8 border-double border-brand-700 rounded-xl shadow-lg text-center relative font-serif">
+                    <!-- Corner Ornaments -->
+                    <div class="absolute top-3 left-3 text-brand-600 text-xl">★</div>
+                    <div class="absolute top-3 right-3 text-brand-600 text-xl">★</div>
+                    <div class="absolute bottom-3 left-3 text-brand-600 text-xl">★</div>
+                    <div class="absolute bottom-3 right-3 text-brand-600 text-xl">★</div>
+
+                    <p class="text-xs font-sans tracking-widest text-brand-600 uppercase font-bold">Acumen International Institute</p>
+                    <h1 class="text-3xl font-bold text-slate-800 mt-2 font-serif">Certificate of Achievement</h1>
+                    <p class="text-xs text-slate-500 font-sans mt-1">Spoken & Written English Proficiency</p>
+
+                    <p class="text-xs text-slate-600 italic mt-6 font-sans">This is proudly awarded to</p>
+                    <h2 id="cert-student-name" class="text-2xl font-bold text-brand-900 border-b-2 border-brand-500 inline-block px-8 py-1 mt-2">Kavindu Perera</h2>
+
+                    <p class="text-xs text-slate-600 leading-relaxed mt-6 font-sans max-w-md mx-auto">
+                        For successfully completing <span id="cert-student-grade" class="font-semibold text-slate-800">Grade 01 (Step 01)</span> evaluation with distinction, attaining an official average exam score of <span id="cert-student-score" class="font-bold text-brand-600">88%</span>.
+                    </p>
+
+                    <div id="cert-medal-badge" class="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-300 text-amber-700 text-xs font-bold font-sans">
+                        <i class="fa-solid fa-medal"></i> Awarded Gold Medal Honor
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-8 mt-12 pt-6 border-t border-slate-200 font-sans text-xs">
+                        <div>
+                            <p class="font-bold text-slate-800">Directress / Chief Examiner</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">Acumen International</p>
+                        </div>
+                        <div>
+                            <p id="cert-date" class="font-bold text-slate-800">October 24, 2026</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">Date of Issue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 7: Add Event Modal -->
+    <div id="modal-event" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm">Create Institute Event</h3>
+                <button onclick="closeModal('modal-event')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-event" onsubmit="handleSaveEvent(event)" class="p-6 space-y-4 text-xs"><input type="hidden" id="event-edit-id">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Event Title *</label>
+                    <input type="text" id="event-title" required placeholder="Annual Speech Contest 2026" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Event Date *</label>
+                    <input type="date" id="event-date" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Allocated Budget (LKR) *</label>
+                    <input type="number" id="event-budget" required placeholder="150000" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-event')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 8: Add Courier Waybill Modal -->
+    <div id="modal-courier" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm">Create Courier Shipment</h3>
+                <button onclick="closeModal('modal-courier')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-courier" onsubmit="handleSaveCourier(event)" class="p-6 space-y-4 text-xs"><input type="hidden" id="courier-edit-id">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Waybill Number *</label>
+                    <input type="text" id="courier-waybill" required placeholder="PRCL-99812" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Recipient Student *</label>
+                    <select id="courier-student-id" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white"></select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Items Included *</label>
+                    <input type="text" id="courier-items" required placeholder="Step 01 Book & Poem Cards" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Courier Service</label>
+                    <input type="text" id="courier-service" placeholder="Pronto Express / Domestic Post" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-courier')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Dispatch Shipment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 9: Upload File Hub Modal -->
+    <div id="modal-upload" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm">Upload Document to File Hub</h3>
+                <button onclick="closeModal('modal-upload')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-upload" onsubmit="handleSaveFile(event)" class="p-6 space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Document Name *</label>
+                    <input type="text" id="file-name" required placeholder="Grade 02 Examination Syllabus.pdf" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Category</label>
+                    <select id="file-category" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white">
+                        <option value="Curriculum">Syllabus & Curriculum</option>
+                        <option value="Exams">Exam Papers</option>
+                        <option value="Admin">Admin Forms</option>
+                        <option value="Certificates">Certificate Copies</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Choose real file (small files recommended)</label>
+                    <input type="file" id="file-attachment" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-upload')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Save Document</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 10: Add System User Modal -->
+    <div id="modal-user" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-sm">Add System Staff User</h3>
+                <button onclick="closeModal('modal-user')" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="form-user" onsubmit="handleSaveUser(event)" class="p-6 space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">User Full Name *</label>
+                    <input type="text" id="usr-name" required placeholder="Saman Kumara" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Username *</label>
+                    <input type="text" id="usr-username" required autocomplete="off" placeholder="e.g. kasun.staff" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Password <span class="font-normal">(required for new user)</span></label>
+                    <input type="password" id="usr-password" autocomplete="new-password" placeholder="Set login password" class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Role *</label>
+                    <select id="usr-role" required class="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brand-500 bg-white">
+                        <option value="Admin">Administrator (Full Edit Powers)</option>
+                        <option value="Staff">Staff (View / Basic Entry)</option>
+                        <option value="Teacher">Teacher (Own Students Only)</option>
+                    </select>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-user')" class="px-4 py-2 bg-slate-100 text-slate-600 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT LOGIC & LOCALSTORAGE PERSISTENCE -->
+    <script>
+        // GLOBAL INITIAL DATA SEEDS
+        const INITIAL_STATE = {
+            config: {
+                companyName: "Acumen International",
+                subtitle: "Spoken & Written English Institute",
+                currency: "LKR",
+                contactPhone: "077 123 4567",
+                thresholds: { gold: 85, silver: 75, bronze: 65 }
+            },
+            currentUserRole: "Admin", // Admin or Staff
+            courses: Array.from({length: 8}, (_, i) => ({ id: `c${i+1}`, title: `Grade ${String(i+1).padStart(2,'0')}`, stepBook: `Step ${String(Math.min(i+1,4)).padStart(2,'0')} Book`, poemCard: `Poem Card Set ${String(Math.min(i+1,4)).padStart(2,'0')}`, fee: [3500,3800,4000,4200,4500,4800,5000,5200][i] })),
+            students: [
+                { id: "s1", index: "ACM-2026-001", name: "Kavindu Perera", grade: "Grade 01", step: "Step 01", guardian: "Nimal Perera", phone: "0771234567", feeStatus: "Paid", writtenMark: 88, spokenMark: 90, notes: "Excellent oral participation", address: "No 45, Galle Rd, Colombo 03" },
+                { id: "s2", index: "ACM-2026-002", name: "Dilini Fernando", grade: "Grade 02", step: "Step 02", guardian: "Saman Fernando", phone: "0719876543", feeStatus: "Paid", writtenMark: 78, spokenMark: 80, notes: "Needs focus on spelling", address: "No 12, Main St, Kandy" },
+                { id: "s3", index: "ACM-2026-003", name: "Nimasha Silva", grade: "Grade 01", step: "Step 01", guardian: "Ruwan Silva", phone: "0754443322", feeStatus: "Pending", writtenMark: 68, spokenMark: 65, notes: "Pending book dispatch", address: "No 88, Station Rd, Kurunegala" }
+            ],
+            inventory: [
+                { id: "i1", code: "BK-STEP-01", name: "Step 01 Spoken English Book", category: "Books", qty: 45, reorder: 20 },
+                { id: "i2", code: "PC-SET-01", name: "Step 01 Poem Cards Set", category: "Poem Cards", qty: 12, reorder: 15 },
+                { id: "i3", code: "MED-GOLD", name: "Gold Plated Honor Medals", category: "Medals", qty: 30, reorder: 10 },
+                { id: "i4", code: "CERT-STD", name: "Official Parchment Certificates", category: "Certificates", qty: 150, reorder: 50 }
+            ],
+            finance: [
+                { id: "f1", date: "2026-10-20", desc: "Course Fee - Kavindu Perera", category: "Student Fees", type: "Income", amount: 3500 },
+                { id: "f2", date: "2026-10-22", desc: "Printing Step 01 Books", category: "Printing", type: "Expense", amount: 25000 },
+                { id: "f3", date: "2026-10-24", desc: "Course Fee - Dilini Fernando", category: "Student Fees", type: "Income", amount: 3800 }
+            ],
+            events: [
+                { id: "e1", title: "Annual English Speech Contest 2026", date: "2026-11-15", budget: 150000, spent: 45000 },
+                { id: "e2", title: "Step 01 Poem Recitation Gala", date: "2026-12-10", budget: 80000, spent: 12000 }
+            ],
+            couriers: [
+                { id: "cr1", waybill: "PRCL-99120", studentId: "s1", items: "Step 01 Book & Cards", service: "Pronto Express", status: "Delivered" },
+                { id: "cr2", waybill: "PRCL-99121", studentId: "s3", items: "Step 01 Book", service: "Domestic Post", status: "In Transit" }
+            ],
+            files: [
+                { id: "fl1", name: "Grade 01 Syllabus Breakdown.pdf", category: "Curriculum", size: "1.2 MB", date: "2026-10-01" },
+                { id: "fl2", name: "Spoken Exam Evaluation Rubric.pdf", category: "Exams", size: "850 KB", date: "2026-10-05" }
+            ],
+            users: [
+                { id: "u1", name: "Administrator", username: "admin", password: "Admin@123", role: "Admin" },
+                { id: "u2", name: "Reception Staff", username: "staff", password: "Staff@123", role: "Staff" },
+                { id: "u3", name: "Demo Teacher", username: "teacher", password: "Teacher@123", role: "Teacher" }
+            ]
+        };
+
+        // LOAD OR INIT STATE
+        let db = JSON.parse(localStorage.getItem('acumen_erp_db')) || JSON.parse(JSON.stringify(INITIAL_STATE));
+        // Migrate older browser data to include editable login credentials.
+        if (!Array.isArray(db.users)) db.users = JSON.parse(JSON.stringify(INITIAL_STATE.users));
+        db.users.forEach(u => { if (!u.username) u.username = u.role === 'Admin' ? 'admin' : (u.id === 'u2' ? 'staff' : String(u.name || 'user').toLowerCase().replace(/[^a-z0-9]+/g,'.')); if (!u.password) u.password = u.username === 'admin' ? 'Admin@123' : (u.username === 'staff' ? 'Staff@123' : (u.username === 'teacher' ? 'Teacher@123' : 'ChangeMe123!')); });
+        if (!Array.isArray(db.students)) db.students = [];
+        db.students.forEach(s => { if (typeof s.teacherId !== 'string') s.teacherId = ''; });
+        let authenticatedUser = null;
+        function isAdmin() { return !!authenticatedUser && authenticatedUser.role === 'Admin'; }
+        function requireAdmin(action='perform this action') { if (!isAdmin()) { showToast('Admin permission required to ' + action + '.', 'error'); return false; } return true; }
+        function loginUser(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+            const requestedRole = document.getElementById('login-role').value;
+            const account = db.users.find(u => String(u.username || '').toLowerCase() === username && String(u.password || '') === password && u.role === requestedRole);
+            if (!account) { document.getElementById('login-error').classList.remove('hidden'); return; }
+            document.getElementById('login-error').classList.add('hidden');
+            authenticatedUser = { username: account.username, role: account.role, name: account.name, id: account.id };
+            db.currentUserRole = account.role;
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('user-name').innerText = account.name;
+            if (account.role === 'Teacher') switchTab('students');
+            saveDB();
+        }
+        function logoutUser() {
+            authenticatedUser = null;
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function saveDB() {
+            try {
+                db.meta = db.meta || {};
+                db.meta.lastSavedAt = new Date().toISOString();
+                db.meta.lastSavedBy = authenticatedUser ? authenticatedUser.username : 'local';
+                localStorage.setItem('acumen_erp_db', JSON.stringify(db));
+                const saved = document.getElementById('last-saved-label');
+                if (saved) saved.textContent = 'Saved locally ' + new Date(db.meta.lastSavedAt).toLocaleTimeString();
+            } catch (err) { showToast('Browser storage is full. Download a backup and remove large files.', 'error'); }
+            refreshUI();
+        }
+
+        function printCurrentReport() {
+            if (!authenticatedUser) { showToast('Please sign in first.', 'error'); return; }
+            window.print();
+        }
+
+        function downloadCSV(filename, rows) {
+            const escapeCell = value => '"' + String(value ?? '').replace(/"/g, '""') + '"';
+            const csv = rows.map(row => row.map(escapeCell).join(',')).join('\r\n');
+            const blob = new Blob(['\ufeff' + csv], {type:'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob); const a = document.createElement('a');
+            a.href = url; a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+        function exportFinanceCSV() {
+            if (!requireAdmin('export financial reports')) return;
+            downloadCSV('Acumen_Finance_' + new Date().toISOString().slice(0,10) + '.csv', [['Date','Description','Category','Type','Amount LKR'], ...db.finance.map(x=>[x.date,x.desc,x.category,x.type,x.amount])]);
+            showToast('Finance report exported.');
+        }
+        function exportInventoryCSV() {
+            if (!requireAdmin('export stock reports')) return;
+            downloadCSV('Acumen_Stock_' + new Date().toISOString().slice(0,10) + '.csv', [['Item Code','Item','Category','Quantity','Reorder Level','Stock Status'], ...db.inventory.map(x=>[x.code,x.name,x.category,x.qty,x.reorder,Number(x.qty)<=Number(x.reorder)?'REORDER':'OK'])]);
+            showToast('Stock report exported.');
+        }
+        function runDataCheck() {
+            if (!requireAdmin('run data checks')) return;
+            const issues=[];
+            const duplicateIds = arr => { const ids=arr.map(x=>x.id); return ids.filter((id,i)=>ids.indexOf(id)!==i); };
+            [['Students',db.students],['Courses',db.courses],['Stock',db.inventory],['Finance',db.finance],['Users',db.users]].forEach(([name,arr])=>{ if(duplicateIds(arr).length) issues.push(name+': duplicate record IDs'); });
+            if (!db.users.some(u=>u.role==='Admin')) issues.push('No Admin account exists');
+            if (db.students.some(s=>!s.name || !s.index)) issues.push('Some student records are missing a name or index');
+            if (db.finance.some(x=>!Number.isFinite(Number(x.amount)) || Number(x.amount)<0)) issues.push('Finance contains an invalid or negative amount');
+            if (db.inventory.some(x=>Number(x.qty)<0)) issues.push('Stock contains a negative quantity');
+            const report = issues.length ? 'Data check found issues:\n\n• '+issues.join('\n• ') : 'Data check passed. No common data-integrity issues found.';
+            alert(report);
+        }
+        function updateConnectionStatus() {
+            const el=document.getElementById('connection-status'); if(!el) return;
+            el.innerHTML = navigator.onLine ? '<span class="h-2 w-2 rounded-full bg-emerald-500"></span> Local data · Online' : '<span class="h-2 w-2 rounded-full bg-amber-500"></span> Offline mode';
+            el.className = 'hidden sm:inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[11px] font-bold ' + (navigator.onLine?'bg-emerald-50 text-emerald-700':'bg-amber-50 text-amber-700');
+        }
+
+        // NAVIGATION & TAB SWITCHING
+        function switchTab(tabId) {
+            if (db.currentUserRole === 'Teacher' && tabId !== 'students') {
+                tabId = 'students';
+            }
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('sidebar-item-active'));
+            
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            const targetNav = document.getElementById(`nav-${tabId}`);
+            
+            if (targetTab) targetTab.classList.remove('hidden');
+            if (targetNav) targetNav.classList.add('sidebar-item-active');
+            if (window.matchMedia('(max-width: 700px)').matches) toggleSidebar(false);
+
+            // Titles
+            const titles = {
+                dashboard: { title: "Executive Dashboard", sub: "Real-time institute analytics & operations summary" },
+                students: { title: "Student Directory", sub: "Manage enrolments, grades, fee status & profiles" },
+                curriculum: { title: "Curriculum & Grades Master", sub: "Configure Steps 01-04, Poem Cards, and Grade Rules" },
+                exams: { title: "Examination Ledger & Medals", sub: "Record written/spoken marks & generate medal honors" },
+                inventory: { title: "Stock & Material Inventory", sub: "Step Books, Poem Cards, Medals & Certificates" },
+                finance: { title: "Financial Accounts Ledger", sub: "Cash book, revenue tracking & operating expenses" },
+                events: { title: "Events & Contest Budgets", sub: "Manage Speech Contests & Convocation budgets" },
+                courier: { title: "Courier & Waybill Logistics", sub: "Dispatch status & student book delivery tracking" },
+                files: { title: "Institute File Hub", sub: "Repository for syllabus, exam papers and forms" },
+                settings: { title: "Master Configuration", sub: "System branding, exam rules & user roles" }
+            };
+
+            if (titles[tabId]) {
+                document.getElementById('page-title').innerText = titles[tabId].title;
+                document.getElementById('page-subtitle').innerText = titles[tabId].sub;
+            }
+
+            if (tabId === 'dashboard') renderDashboardChart();
+        }
+
+        // ROLE SWITCHING (ADMIN / STAFF)
+        function toggleUserRole() { showToast('Please sign out and use the correct account.', 'error'); }
+
+        function applyRolePermissions() {
+            const isAdmin = db.currentUserRole === 'Admin';
+            const isTeacher = db.currentUserRole === 'Teacher';
+            document.getElementById('role-badge').innerText = db.currentUserRole.toUpperCase();
+            document.getElementById('user-role-label').innerText = isAdmin ? 'Super Master Admin' : (isTeacher ? 'Teacher · Own Students Only' : 'Staff Member');
+            document.getElementById('user-avatar').innerText = isAdmin ? 'AD' : (isTeacher ? 'TE' : 'ST');
+            document.getElementById('role-status-text').innerText = isAdmin ? 'Admin Mode (Full Editing)' : (isTeacher ? 'Teacher Mode (Own Students · Read Only)' : 'Staff Mode (Read Only Operations)');
+            document.getElementById('role-indicator-dot').className = `w-2 h-2 rounded-full ${isAdmin ? 'bg-emerald-500' : 'bg-amber-500'}`;
+            // Teachers can access only the student directory, and only records assigned to their account.
+            ['dashboard','curriculum','exams','inventory','finance','events','courier','files','settings'].forEach(id => {
+                const nav = document.getElementById('nav-' + id);
+                if (nav) nav.classList.toggle('hidden', isTeacher);
+            });
+            const studentNav = document.getElementById('nav-students');
+            if (studentNav) studentNav.classList.toggle('hidden', false);
+
+            // Hide/Show Admin elements
+            document.querySelectorAll('.admin-only').forEach(el => {
+                if (isAdmin) el.classList.remove('hidden'); else el.classList.add('hidden');
+            });
+            // Keep every mutation action hidden for staff in the offline prototype.
+            document.querySelectorAll('[data-mutation="true"]').forEach(el => { el.classList.toggle('hidden', !isAdmin); });
+            if (isTeacher) document.querySelectorAll('#tab-students button[onclick*="editStudent"], #tab-students button[onclick*="deleteStudent"], #tab-students button[onclick*="openAddStudentModal"]').forEach(el => el.classList.add('hidden'));
+            else document.querySelectorAll('#tab-students button[onclick*="editStudent"], #tab-students button[onclick*="openAddStudentModal"]').forEach(el => el.classList.toggle('hidden', !isAdmin));
+            document.querySelectorAll('button[onclick]').forEach(el => {
+                const action = el.getAttribute('onclick') || '';
+                if (/openAdd|openUpload|editStudent|editCourse|editStock|editTransaction|editEvent|editCourier|editUser|deleteStudent|deleteCourse|deleteStock|deleteTransaction|deleteEvent|deleteCourier|deleteFile|deleteUser|saveGeneralConfig|saveThresholdsConfig|resetToDemoData|handleSave/i.test(action)) el.classList.toggle('hidden', !isAdmin);
+            });
+        }
+
+        // TOAST NOTIFICATION
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-3 rounded-xl shadow-lg text-xs font-semibold text-white pointer-events-auto flex items-center justify-between transition-all duration-300 transform translate-x-5 ${type === 'success' ? 'bg-brand-600' : 'bg-rose-600'}`;
+            toast.innerHTML = `<span><i class="fa-solid fa-circle-check mr-2"></i>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // MODAL HELPERS
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function toggleQuickAddMenu() { document.getElementById('quick-add-menu').classList.toggle('hidden'); }
+
+        // REFRESH ALL UI & DATA RENDERING
+        function refreshUI() {
+            applyRolePermissions();
+            updateBranding();
+            renderDashboardMetrics();
+            renderStudentsTable();
+            renderCurriculumCards();
+            renderExamsTable();
+            renderInventoryTable();
+            renderFinanceTable();
+            renderEventsGrid();
+            renderCourierTable();
+            renderFilesGrid();
+            renderUsersTable();
+            populateDropdowns();
+        }
+
+        // BRANDING UPDATES
+        function updateBranding() {
+            document.getElementById('brand-title').innerText = db.config.companyName || "Acumen";
+            document.getElementById('brand-subtitle').innerText = db.config.subtitle || "Spoken English";
+            document.getElementById('cfg-company-name').value = db.config.companyName || "";
+            document.getElementById('cfg-company-subtitle').value = db.config.subtitle || "";
+            document.getElementById('cfg-currency-symbol').value = db.config.currency || "LKR";
+            document.getElementById('cfg-contact-phone').value = db.config.contactPhone || "";
+
+            document.getElementById('cfg-gold-mark').value = db.config.thresholds.gold;
+            document.getElementById('cfg-silver-mark').value = db.config.thresholds.silver;
+            document.getElementById('cfg-bronze-mark').value = db.config.thresholds.bronze;
+
+            document.getElementById('gold-threshold-text').innerText = db.config.thresholds.gold + '%';
+            document.getElementById('silver-threshold-text').innerText = db.config.thresholds.silver + '%';
+            document.getElementById('bronze-threshold-text').innerText = db.config.thresholds.bronze + '%';
+        }
+
+        // DASHBOARD METRICS & CHARTS
+        function renderDashboardMetrics() {
+            document.getElementById('dash-total-students').innerText = db.students.length;
+            
+            // Financials
+            const income = db.finance.filter(f => f.type === 'Income').reduce((a,b) => a + Number(b.amount), 0);
+            const expense = db.finance.filter(f => f.type === 'Expense').reduce((a,b) => a + Number(b.amount), 0);
+            const net = income - expense;
+            document.getElementById('dash-cash-balance').innerText = `${db.config.currency} ${net.toLocaleString()}`;
+
+            // Medals Total
+            let totalMedals = 0;
+            db.students.forEach(s => {
+                if (s.writtenMark && s.spokenMark) {
+                    const avg = (Number(s.writtenMark) + Number(s.spokenMark)) / 2;
+                    if (avg >= db.config.thresholds.bronze) totalMedals++;
+                }
+            });
+            document.getElementById('dash-medals-awarded').innerText = totalMedals;
+
+            // Low Stock
+            const lowStockCount = db.inventory.filter(i => Number(i.qty) <= Number(i.reorder)).length;
+            document.getElementById('dash-low-stock').innerText = lowStockCount;
+
+            // Quick Stats
+            const booksQty = db.inventory.filter(i => i.category === 'Books' || i.category === 'Poem Cards').reduce((a,b) => a + Number(b.qty), 0);
+            document.getElementById('dash-total-books-count').innerText = `${booksQty} items`;
+
+            const totalEventBudget = db.events.reduce((a,b) => a + Number(b.budget), 0);
+            document.getElementById('dash-event-budget').innerText = `${db.config.currency} ${totalEventBudget.toLocaleString()}`;
+
+            const pendingCouriers = db.couriers.filter(c => c.status !== 'Delivered').length;
+            document.getElementById('dash-pending-couriers').innerText = `${pendingCouriers} shipments`;
+        }
+
+        let chartInstance = null;
+        function renderDashboardChart() {
+            const canvas = document.getElementById('gradeChart'); if (!canvas) return;
+            const gradeCounts = {};
+            db.courses.forEach(c => gradeCounts[c.title] = 0);
+            db.students.forEach(st => { gradeCounts[st.grade] = (gradeCounts[st.grade] || 0) + 1; });
+            if (typeof Chart === 'undefined') {
+                const ctx2 = canvas.getContext('2d'); if (!ctx2) return;
+                const w = canvas.width = Math.max(320, canvas.clientWidth || 600); const h = canvas.height = 240;
+                ctx2.clearRect(0,0,w,h); const vals = Object.values(gradeCounts), labels = Object.keys(gradeCounts); const max = Math.max(1,...vals);
+                const slot = (w-40)/Math.max(1,labels.length); ctx2.font = '11px Arial'; ctx2.fillStyle = '#5c3cff';
+                vals.forEach((v,i)=>{const bh=(h-55)*v/max;ctx2.fillRect(24+i*slot,h-30-bh,Math.max(8,slot*.55),bh);ctx2.fillStyle='#475569';ctx2.save();ctx2.translate(24+i*slot,h-12);ctx2.rotate(-.25);ctx2.fillText(labels[i],0,0);ctx2.restore();ctx2.fillStyle='#5c3cff';});
+                return;
+            }
+            const ctx = canvas.getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(gradeCounts),
+                    datasets: [{
+                        label: 'Active Students',
+                        data: Object.values(gradeCounts),
+                        backgroundColor: '#5c3cff',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+        }
+
+        // POPULATE DROPDOWNS
+        function populateDropdowns() {
+            // Student Grade & Step selects
+            const gradeSelects = ['student-grade', 'student-grade-filter'];
+            const stepSelects = ['student-step', 'student-step-filter'];
+
+            gradeSelects.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const currentVal = el.value;
+                let html = id.includes('filter') ? '<option value="">All Grades</option>' : '';
+                db.courses.forEach(c => { html += `<option value="${c.title}">${c.title}</option>`; });
+                el.innerHTML = html;
+                if (currentVal) el.value = currentVal;
+            });
+
+            stepSelects.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const currentVal = el.value;
+                let html = id.includes('filter') ? '<option value="">All Steps</option>' : '';
+                ['Step 01', 'Step 02', 'Step 03', 'Step 04'].forEach(st => { html += `<option value="${st}">${st}</option>`; });
+                el.innerHTML = html;
+                if (currentVal) el.value = currentVal;
+            });
+
+            // Courier Student Dropdown
+            const courierStudentEl = document.getElementById('courier-student-id');
+            if (courierStudentEl) {
+                let html = '';
+                db.students.forEach(s => { html += `<option value="${s.id}">${s.name} (${s.index})</option>`; });
+                courierStudentEl.innerHTML = html;
+            }
+        }
+
+        // STUDENTS MANAGEMENT
+        function renderStudentsTable() {
+            const tbody = document.getElementById('students-table-body');
+            const search = document.getElementById('student-search').value.toLowerCase();
+            const gradeFilter = document.getElementById('student-grade-filter').value;
+            const stepFilter = document.getElementById('student-step-filter').value;
+
+            const visibleStudents = db.currentUserRole === 'Teacher'
+                ? db.students.filter(s => s.teacherId === authenticatedUser?.id)
+                : db.students;
+            const filtered = visibleStudents.filter(s => {
+                const matchSearch = String(s.name || '').toLowerCase().includes(search) || String(s.index || '').toLowerCase().includes(search) || String(s.phone || '').includes(search);
+                const matchGrade = !gradeFilter || s.grade === gradeFilter;
+                const matchStep = !stepFilter || s.step === stepFilter;
+                return matchSearch && matchGrade && matchStep;
+            });
+
+            const renderLimit = 200;
+            const renderRows = filtered.slice(0, renderLimit);
+            tbody.innerHTML = renderRows.map(s => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-4">
+                        <div class="font-bold text-slate-800">${s.name}</div>
+                        <div class="text-[10px] text-brand-600 font-mono font-semibold">${s.index}</div>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-2 py-0.5 rounded-md bg-slate-100 font-semibold text-slate-700">${s.grade}</span>
+                        <div class="text-[11px] text-slate-500 mt-0.5">${s.step}</div>
+                    </td>
+                    <td class="p-4">
+                        <div>${s.guardian || 'N/A'}</div>
+                        <div class="text-[11px] text-slate-500">${s.phone}</div>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${s.feeStatus === 'Paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
+                            ${s.feeStatus}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <div>W: <span class="font-bold">${s.writtenMark ?? '-'}</span> | S: <span class="font-bold">${s.spokenMark ?? '-'}</span></div>
+                    </td>
+                    <td class="p-4 text-right space-x-1">
+                        <button onclick="editStudent('${s.id}')" class="p-1.5 text-slate-500 hover:text-brand-600 hover:bg-brand-50 rounded-lg"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="previewCertificate('${s.id}')" title="Certificate" class="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg"><i class="fa-solid fa-certificate"></i></button>
+                        <button onclick="deleteStudent('${s.id}')" class="admin-only p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('') || `<tr><td colspan="6" class="p-6 text-center text-slate-400">No students assigned to your teacher account, or no students match the filters.</td></tr>`;
+            if (filtered.length > renderLimit) {
+                tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="6" class="p-4 text-center text-slate-500 bg-slate-50">Showing first ${renderLimit.toLocaleString()} of ${filtered.length.toLocaleString()} matching students. Use search or filters to narrow the list.</td></tr>`);
+            }
+
+            applyRolePermissions();
+        }
+
+        function populateTeacherOptions(selectedId) {
+            const select = document.getElementById('student-teacher');
+            if (!select) return;
+            const teachers = db.users.filter(u => u.role === 'Teacher');
+            select.innerHTML = '<option value="">Unassigned</option>' + teachers.map(t => `<option value="${t.id}">${t.name} (${t.username})</option>`).join('');
+            select.value = selectedId || '';
+        }
+
+        function openAddStudentModal() {
+            document.getElementById('modal-student-title').innerText = "Register New Student";
+            if (!requireAdmin('add students')) return;
+            document.getElementById('student-edit-id').value = "";
+            document.getElementById('form-student').reset();
+            populateTeacherOptions('');
+            openModal('modal-student');
+        }
+
+        function editStudent(id) {
+            if (!requireAdmin('edit student records')) return;
+            const s = db.students.find(x => x.id === id);
+            if (!s) return;
+            document.getElementById('modal-student-title').innerText = "Edit Student Profile";
+            document.getElementById('student-edit-id').value = s.id;
+            document.getElementById('student-index').value = s.index;
+            document.getElementById('student-name').value = s.name;
+            document.getElementById('student-grade').value = s.grade;
+            document.getElementById('student-step').value = s.step;
+            document.getElementById('student-guardian').value = s.guardian || "";
+            document.getElementById('student-phone').value = s.phone;
+            document.getElementById('student-fee').value = s.feeStatus;
+            document.getElementById('student-address').value = s.address || "";
+            document.getElementById('student-notes').value = s.notes || "";
+            populateTeacherOptions(s.teacherId || '');
+            openModal('modal-student');
+        }
+
+        function handleSaveStudent(e) {
+            e.preventDefault();
+            if (!requireAdmin('add or update students')) return;
+            
+            const editId = document.getElementById('student-edit-id').value;
+            const data = {
+                index: document.getElementById('student-index').value,
+                name: document.getElementById('student-name').value,
+                grade: document.getElementById('student-grade').value,
+                step: document.getElementById('student-step').value,
+                guardian: document.getElementById('student-guardian').value,
+                phone: document.getElementById('student-phone').value,
+                feeStatus: document.getElementById('student-fee').value,
+                address: document.getElementById('student-address').value,
+                notes: document.getElementById('student-notes').value,
+                teacherId: document.getElementById('student-teacher').value || ''
+            };
+
+            if (editId) {
+                const idx = db.students.findIndex(x => x.id === editId);
+                if (idx !== -1) db.students[idx] = { ...db.students[idx], ...data };
+            } else {
+                db.students.push({ id: 's_' + Date.now(), ...data, writtenMark: null, spokenMark: null });
+            }
+
+            saveDB();
+            closeModal('modal-student');
+            showToast("Student saved successfully!");
+        }
+
+        function deleteStudent(id) {
+            if (!requireAdmin('delete students')) return;
+            if (confirm("Are you sure you want to delete this student profile?")) {
+                db.students = db.students.filter(x => x.id !== id);
+                saveDB();
+                showToast("Student removed");
+            }
+        }
+
+        function downloadStudentImportTemplate() {
+            if (!requireAdmin('download the student import template')) return;
+            const rows = [
+                ['Index','Name','Grade','Step','Guardian','Phone','FeeStatus','Address','Notes','TeacherUsername'],
+                ['ACM-2026-001','Kavindu Perera','Grade 01','Step 01','Nimal Perera','0771234567','Pending','No. 12, Main Street','Example student','teacher']
+            ];
+            const csv = '\ufeff' + rows.map(row => row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\r\n');
+            const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'Acumen_Student_Import_Template.csv'; a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            showToast('Import template downloaded. You can open it in Excel.');
+        }
+
+        function normalizeImportHeader(value) {
+            return String(value ?? '').trim().toLowerCase().replace(/[\s_\-()./]+/g, '');
+        }
+
+        function parseStudentCSV(text) {
+            // CSV parser supports quoted commas, escaped quotes, and line breaks inside quoted cells.
+            const rows = []; let row = []; let cell = ''; let quoted = false;
+            const input = String(text || '').replace(/^\ufeff/, '');
+            for (let i = 0; i < input.length; i++) {
+                const ch = input[i];
+                if (quoted) {
+                    if (ch === '"' && input[i + 1] === '"') { cell += '"'; i++; }
+                    else if (ch === '"') quoted = false;
+                    else cell += ch;
+                } else if (ch === '"' && cell.length === 0) quoted = true;
+                else if (ch === ',') { row.push(cell); cell = ''; }
+                else if (ch === '\n' || ch === '\r') {
+                    if (ch === '\r' && input[i + 1] === '\n') i++;
+                    row.push(cell); cell = '';
+                    if (row.some(v => String(v).trim() !== '')) rows.push(row);
+                    row = [];
+                } else cell += ch;
+            }
+            if (cell.length || row.length) { row.push(cell); if (row.some(v => String(v).trim() !== '')) rows.push(row); }
+            if (rows.length < 2) return [];
+            const headers = rows[0].map(normalizeImportHeader);
+            return rows.slice(1).map(values => {
+                const obj = {};
+                headers.forEach((h, i) => { if (h) obj[h] = values[i] ?? ''; });
+                return obj;
+            });
+        }
+
+        function getImportValue(row, aliases) {
+            for (const alias of aliases) {
+                const key = normalizeImportHeader(alias);
+                if (row[key] !== undefined && String(row[key]).trim() !== '') return String(row[key]).trim();
+            }
+            return '';
+        }
+
+        function normalizeGrade(value) {
+            const v = String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+            const m = v.match(/(?:grade|gr|g)?\s*0?([1-8])\b/);
+            return m ? 'Grade ' + String(Number(m[1])).padStart(2, '0') : '';
+        }
+
+        function normalizeStep(value) {
+            const v = String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+            const m = v.match(/(?:step|st)?\s*0?([1-4])\b/);
+            return m ? 'Step ' + String(Number(m[1])).padStart(2, '0') : '';
+        }
+
+        async function handleStudentBulkImport(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            if (!requireAdmin('bulk import students')) { event.target.value = ''; return; }
+            const ext = file.name.split('.').pop().toLowerCase();
+            try {
+                let rawRows = [];
+                if (ext === 'csv') {
+                    rawRows = parseStudentCSV(await file.text());
+                } else if (ext === 'xlsx' || ext === 'xls') {
+                    if (!window.XLSX) {
+                        throw new Error('Excel reader is unavailable. Connect to the internet to load the Excel parser, or save the workbook as CSV and import it offline.');
+                    }
+                    const buffer = await file.arrayBuffer();
+                    const workbook = XLSX.read(buffer, {type:'array', cellDates:true});
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    rawRows = XLSX.utils.sheet_to_json(sheet, {defval:'', raw:false});
+                    rawRows = rawRows.map(source => {
+                        const normalized = {};
+                        Object.keys(source).forEach(k => normalized[normalizeImportHeader(k)] = source[k]);
+                        return normalized;
+                    });
+                } else {
+                    throw new Error('Please select an Excel (.xlsx, .xls) or CSV file.');
+                }
+
+                if (!rawRows.length) throw new Error('No student rows found. Make sure the first row contains column headings.');
+                if (rawRows.length > 50000) throw new Error('This file has more than 50,000 rows. Please split it into smaller files.');
+                const existingIndexes = new Set(db.students.map(s => String(s.index || '').trim().toLowerCase()).filter(Boolean));
+                const seenIndexes = new Set();
+                const teachersByUsername = new Map(db.users.filter(u => u.role === 'Teacher').map(u => [String(u.username || '').toLowerCase(), u]));
+                const teachersByName = new Map(db.users.filter(u => u.role === 'Teacher').map(u => [String(u.name || '').toLowerCase(), u]));
+                const accepted = []; const errors = []; let duplicates = 0;
+
+                rawRows.forEach((row, i) => {
+                    const index = getImportValue(row, ['Index','StudentIndex','Student ID','Registration No','Reg No','Admission No']);
+                    const name = getImportValue(row, ['Name','StudentName','Full Name','Student']);
+                    const grade = normalizeGrade(getImportValue(row, ['Grade','School Grade','Class']));
+                    const step = normalizeStep(getImportValue(row, ['Step','Course Step','Level']));
+                    const phone = getImportValue(row, ['Phone','Telephone','Mobile','Contact Number','Guardian Phone']);
+                    const guardian = getImportValue(row, ['Guardian','Parent','Parent Name','Guardian Name']);
+                    const feeRaw = getImportValue(row, ['FeeStatus','Fee Status','Payment Status']).toLowerCase();
+                    const feeStatus = /paid|complete|completed/.test(feeRaw) ? 'Paid' : 'Pending';
+                    const address = getImportValue(row, ['Address','Home Address']);
+                    const notes = getImportValue(row, ['Notes','Remarks','Comment']);
+                    const teacherLabel = getImportValue(row, ['TeacherUsername','Teacher Username','Teacher','Assigned Teacher']);
+                    const line = i + 2;
+                    if (!index || !name || !grade || !step) {
+                        errors.push(`Row ${line}: missing Index, Name, valid Grade (01–08), or valid Step (01–04).`);
+                        return;
+                    }
+                    const indexKey = index.toLowerCase();
+                    if (existingIndexes.has(indexKey) || seenIndexes.has(indexKey)) { duplicates++; return; }
+                    let teacherId = '';
+                    if (teacherLabel) {
+                        const teacher = teachersByUsername.get(teacherLabel.toLowerCase()) || teachersByName.get(teacherLabel.toLowerCase());
+                        if (!teacher) {
+                            errors.push(`Row ${line}: teacher "${teacherLabel}" not found; student skipped.`);
+                            return;
+                        }
+                        teacherId = teacher.id;
+                    }
+                    seenIndexes.add(indexKey);
+                    accepted.push({
+                        id: 's_imp_' + Date.now().toString(36) + '_' + (i + 1).toString(36),
+                        index, name, grade, step, guardian, phone, feeStatus, address, notes, teacherId,
+                        writtenMark: null, spokenMark: null
+                    });
+                });
+
+                if (!accepted.length) {
+                    const details = errors.slice(0, 5).join('\n');
+                    throw new Error(`No new valid students to import. Duplicates skipped: ${duplicates}. ${details}`);
+                }
+                const preview = `File: ${file.name}\nRows read: ${rawRows.length.toLocaleString()}\nReady to import: ${accepted.length.toLocaleString()}\nDuplicate index rows skipped: ${duplicates.toLocaleString()}\nRows with problems skipped: ${errors.length.toLocaleString()}${errors.length ? '\n\nFirst issues:\n' + errors.slice(0, 8).join('\n') : ''}\n\nImport these students now?`;
+                if (!confirm(preview)) return;
+                const previousLength = db.students.length;
+                db.students.push(...accepted);
+                saveDB();
+                showToast(`Imported ${accepted.length.toLocaleString()} students. ${duplicates.toLocaleString()} duplicates skipped.`);
+                if (errors.length) {
+                    const report = ['Row issue report', ...errors].join('\r\n');
+                    const blob = new Blob(['\ufeff' + report], {type:'text/plain;charset=utf-8;'});
+                    const url = URL.createObjectURL(blob); const a = document.createElement('a');
+                    a.href = url; a.download = 'Acumen_Student_Import_Issues.txt'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+                }
+                console.info(`Student bulk import completed: ${previousLength} existing, ${accepted.length} imported.`);
+            } catch (err) {
+                console.error(err);
+                showToast(err && err.message ? err.message : 'Could not import this file.', 'error');
+                if (err && err.message && err.message.length > 160) alert(err.message);
+            } finally {
+                event.target.value = '';
+            }
+        }
+
+        function exportStudentsCSV() {
+            if (!authenticatedUser) { showToast('Please sign in first.', 'error'); return; }
+            // Teachers may export only students explicitly assigned to their own account.
+            const rows = authenticatedUser.role === 'Teacher'
+                ? db.students.filter(s => s.teacherId === authenticatedUser.id)
+                : db.students;
+            const escapeCSV = value => '"' + String(value ?? '').replace(/"/g, '""') + '"';
+            const csvRows = [
+                ['Index','Name','Grade','Step','Guardian','Phone','FeeStatus'],
+                ...rows.map(s => [s.index, s.name, s.grade, s.step, s.guardian, s.phone, s.feeStatus])
+            ];
+            const csv = '\ufeff' + csvRows.map(row => row.map(escapeCSV).join(',')).join('\r\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = authenticatedUser.role === 'Teacher' ? 'Acumen_My_Assigned_Students.csv' : 'Acumen_Students_Export.csv';
+            a.click();
+            window.setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+        }
+
+        // CURRICULUM MANAGEMENT
+        function renderCurriculumCards() {
+            const grid = document.getElementById('curriculum-cards-grid');
+            grid.innerHTML = db.courses.map(c => `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-lg bg-brand-50 text-brand-700 font-bold text-xs">${c.title}</span>
+                            <span class="text-xs font-semibold text-slate-500">${db.config.currency} ${Number(c.fee).toLocaleString()} / mo</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mt-3">${c.stepBook}</h4>
+                        <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-scroll text-brand-500 mr-1"></i>${c.poemCard}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] text-slate-400">Step Level Master</span>
+                        <div class="space-x-1">
+                            <button onclick="editCourse('${c.id}')" class="p-1.5 text-slate-500 hover:text-brand-600 rounded-lg"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteCourse('${c.id}')" class="admin-only p-1.5 text-slate-500 hover:text-rose-600 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            applyRolePermissions();
+        }
+
+        function openAddCourseModal() {
+            document.getElementById('modal-course-title').innerText = "Add Curriculum Grade";
+            document.getElementById('course-edit-id').value = "";
+            document.getElementById('form-course').reset();
+            openModal('modal-course');
+        }
+
+        function editCourse(id) {
+            if (!requireAdmin('edit curriculum')) return;
+            const c = db.courses.find(x => x.id === id);
+            if (!c) return;
+            document.getElementById('modal-course-title').innerText = "Edit Curriculum Grade";
+            document.getElementById('course-edit-id').value = c.id;
+            document.getElementById('course-title').value = c.title;
+            document.getElementById('course-step-book').value = c.stepBook;
+            document.getElementById('course-poem-card').value = c.poemCard;
+            document.getElementById('course-fee').value = c.fee;
+            openModal('modal-course');
+        }
+
+        function handleSaveCourse(e) {
+            e.preventDefault();
+            if (!requireAdmin('change curriculum')) return;
+            
+            const editId = document.getElementById('course-edit-id').value;
+            const data = {
+                title: document.getElementById('course-title').value,
+                stepBook: document.getElementById('course-step-book').value,
+                poemCard: document.getElementById('course-poem-card').value,
+                fee: Number(document.getElementById('course-fee').value)
+            };
+
+            if (editId) {
+                const idx = db.courses.findIndex(x => x.id === editId);
+                if (idx !== -1) db.courses[idx] = { ...db.courses[idx], ...data };
+            } else {
+                db.courses.push({ id: 'c_' + Date.now(), ...data });
+            }
+
+            saveDB();
+            closeModal('modal-course');
+            showToast("Curriculum grade saved!");
+        }
+
+        function deleteCourse(id) {
+            if (!requireAdmin('delete courses')) return;
+            if (confirm("Delete this curriculum grade entry?")) {
+                db.courses = db.courses.filter(x => x.id !== id);
+                saveDB();
+                showToast("Grade removed");
+            }
+        }
+
+        // EXAMS & MEDALS
+        function renderExamsTable() {
+            const tbody = document.getElementById('exam-records-table-body');
+            tbody.innerHTML = db.students.map(s => {
+                const hasMarks = s.writtenMark !== null && s.spokenMark !== null;
+                const avg = hasMarks ? Math.round((Number(s.writtenMark) + Number(s.spokenMark)) / 2) : 0;
+                
+                let medalBadge = `<span class="text-slate-400 italic">No Medal</span>`;
+                if (hasMarks) {
+                    if (avg >= db.config.thresholds.gold) {
+                        medalBadge = `<span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px] flex items-center gap-1 w-max"><i class="fa-solid fa-medal text-amber-600"></i> Gold Medal</span>`;
+                    } else if (avg >= db.config.thresholds.silver) {
+                        medalBadge = `<span class="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 font-bold text-[10px] flex items-center gap-1 w-max"><i class="fa-solid fa-medal text-slate-500"></i> Silver Medal</span>`;
+                    } else if (avg >= db.config.thresholds.bronze) {
+                        medalBadge = `<span class="px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 font-bold text-[10px] flex items-center gap-1 w-max"><i class="fa-solid fa-medal text-orange-600"></i> Bronze Medal</span>`;
+                    }
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-4 font-bold text-slate-800">${s.name} <div class="text-[10px] text-slate-400 font-mono font-normal">${s.index}</div></td>
+                        <td class="p-4">${s.grade} (${s.step})</td>
+                        <td class="p-4 font-semibold">${s.writtenMark !== null ? s.writtenMark + '%' : '-'}</td>
+                        <td class="p-4 font-semibold">${s.spokenMark !== null ? s.spokenMark + '%' : '-'}</td>
+                        <td class="p-4 font-bold text-brand-600">${hasMarks ? avg + '%' : '-'}</td>
+                        <td class="p-4">${medalBadge}</td>
+                        <td class="p-4 text-right">
+                            <button onclick="openExamMarkModal('${s.id}')" class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 rounded-lg text-xs font-semibold">
+                                Record Mark
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openExamMarkModal(studentId) {
+            const s = db.students.find(x => x.id === studentId);
+            if (!s) return;
+            document.getElementById('exam-student-id').value = s.id;
+            document.getElementById('exam-student-label').innerText = `Student: ${s.name} (${s.index})`;
+            document.getElementById('exam-written').value = s.writtenMark ?? "";
+            document.getElementById('exam-spoken').value = s.spokenMark ?? "";
+            openModal('modal-exam-mark');
+        }
+
+        function handleSaveExamMark(e) {
+            e.preventDefault();
+            if (!requireAdmin('change exam results')) return;
+            
+            const studentId = document.getElementById('exam-student-id').value;
+            const written = document.getElementById('exam-written').value;
+            const spoken = document.getElementById('exam-spoken').value;
+
+            const idx = db.students.findIndex(x => x.id === studentId);
+            if (idx !== -1) {
+                db.students[idx].writtenMark = Number(written);
+                db.students[idx].spokenMark = Number(spoken);
+            }
+
+            saveDB();
+            closeModal('modal-exam-mark');
+            showToast("Exam marks saved!");
+        }
+
+        // CERTIFICATE PREVIEW
+        function previewCertificate(studentId) {
+            const s = db.students.find(x => x.id === studentId);
+            if (!s) return;
+
+            document.getElementById('cert-student-name').innerText = s.name;
+            document.getElementById('cert-student-grade').innerText = `${s.grade} (${s.step})`;
+            
+            const avg = (s.writtenMark && s.spokenMark) ? Math.round((Number(s.writtenMark) + Number(s.spokenMark)) / 2) : 0;
+            document.getElementById('cert-student-score').innerText = avg ? avg + '%' : 'N/A';
+
+            let badgeHtml = `<i class="fa-solid fa-graduation-cap"></i> Academic Completion Certificate`;
+            if (avg >= db.config.thresholds.gold) badgeHtml = `<i class="fa-solid fa-medal text-amber-500"></i> Awarded Gold Medal Honor`;
+            else if (avg >= db.config.thresholds.silver) badgeHtml = `<i class="fa-solid fa-medal text-slate-400"></i> Awarded Silver Medal Honor`;
+            else if (avg >= db.config.thresholds.bronze) badgeHtml = `<i class="fa-solid fa-medal text-orange-500"></i> Awarded Bronze Medal Honor`;
+
+            document.getElementById('cert-medal-badge').innerHTML = badgeHtml;
+            openModal('modal-certificate');
+        }
+
+        // INVENTORY MANAGEMENT
+        function renderInventoryTable() {
+            const tbody = document.getElementById('inventory-table-body');
+            tbody.innerHTML = db.inventory.map(i => {
+                const isLow = Number(i.qty) <= Number(i.reorder);
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-4">
+                            <div class="font-bold text-slate-800">${i.name}</div>
+                            <div class="text-[10px] text-slate-400 font-mono">${i.code}</div>
+                        </td>
+                        <td class="p-4"><span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-semibold text-[11px]">${i.category}</span></td>
+                        <td class="p-4 font-bold text-sm">${i.qty} units</td>
+                        <td class="p-4 text-slate-500">${i.reorder} units</td>
+                        <td class="p-4">
+                            ${isLow 
+                                ? `<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold text-[10px]">Reorder Alert</span>`
+                                : `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">In Stock</span>`
+                            }
+                        </td>
+                        <td class="p-4 text-right space-x-1">
+                            <button onclick="adjustStock('${i.id}', 10)" class="px-2 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded font-bold">+10</button>
+                            <button onclick="adjustStock('${i.id}', -5)" class="px-2 py-1 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded font-bold">-5</button>
+                            <button onclick="editStock('${i.id}')" class="p-1.5 text-slate-500 hover:text-brand-600 rounded-lg"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteStock('${i.id}')" class="admin-only p-1.5 text-slate-500 hover:text-rose-600 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            applyRolePermissions();
+        }
+
+        function adjustStock(id, amount) {
+            const idx = db.inventory.findIndex(x => x.id === id);
+            if (idx !== -1) {
+                db.inventory[idx].qty = Math.max(0, Number(db.inventory[idx].qty) + amount);
+                saveDB();
+                showToast("Stock quantity updated!");
+            }
+        }
+
+        function openAddStockModal() {
+            document.getElementById('modal-stock-title').innerText = "Add Stock Item";
+            document.getElementById('stock-edit-id').value = "";
+            document.getElementById('form-stock').reset();
+            openModal('modal-stock');
+        }
+
+        function editStock(id) {
+            if (!requireAdmin('edit stock records')) return;
+            const item = db.inventory.find(x => x.id === id);
+            if (!item) return;
+            document.getElementById('modal-stock-title').innerText = "Edit Stock Item";
+            document.getElementById('stock-edit-id').value = item.id;
+            document.getElementById('stock-code').value = item.code;
+            document.getElementById('stock-name').value = item.name;
+            document.getElementById('stock-category').value = item.category;
+            document.getElementById('stock-qty').value = item.qty;
+            document.getElementById('stock-reorder').value = item.reorder;
+            openModal('modal-stock');
+        }
+
+        function handleSaveStock(e) {
+            e.preventDefault();
+            if (!requireAdmin('update stock')) return;
+            
+            const editId = document.getElementById('stock-edit-id').value;
+            const data = {
+                code: document.getElementById('stock-code').value,
+                name: document.getElementById('stock-name').value,
+                category: document.getElementById('stock-category').value,
+                qty: Number(document.getElementById('stock-qty').value),
+                reorder: Number(document.getElementById('stock-reorder').value)
+            };
+
+            if (editId) {
+                const idx = db.inventory.findIndex(x => x.id === editId);
+                if (idx !== -1) db.inventory[idx] = { ...db.inventory[idx], ...data };
+            } else {
+                db.inventory.push({ id: 'i_' + Date.now(), ...data });
+            }
+
+            saveDB();
+            closeModal('modal-stock');
+            showToast("Stock item saved!");
+        }
+
+        function deleteStock(id) {
+            if (!requireAdmin('delete stock items')) return;
+            if (confirm("Delete this inventory item?")) {
+                db.inventory = db.inventory.filter(x => x.id !== id);
+                saveDB();
+                showToast("Item deleted");
+            }
+        }
+
+        // FINANCIAL ACCOUNTS
+        function renderFinanceTable() {
+            const tbody = document.getElementById('finance-table-body');
+            tbody.innerHTML = db.finance.map(f => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-4 text-slate-500 font-mono">${f.date}</td>
+                    <td class="p-4 font-bold text-slate-800">${f.desc}</td>
+                    <td class="p-4"><span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-semibold">${f.category}</span></td>
+                    <td class="p-4">
+                        <span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${f.type === 'Income' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
+                            ${f.type}
+                        </span>
+                    </td>
+                    <td class="p-4 font-bold ${f.type === 'Income' ? 'text-emerald-600' : 'text-rose-600'}">
+                        ${f.type === 'Income' ? '+' : '-'}${db.config.currency} ${Number(f.amount).toLocaleString()}
+                    </td>
+                    <td class="p-4 text-right">
+                        <button onclick="editTransaction('${f.id}')" class="admin-only p-1.5 text-brand-600" title="Edit transaction">Edit</button>
+                        <button onclick="deleteTransaction('${f.id}')" class="admin-only p-1.5 text-slate-500 hover:text-rose-600 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Totals
+            const income = db.finance.filter(f => f.type === 'Income').reduce((a,b) => a + Number(b.amount), 0);
+            const expense = db.finance.filter(f => f.type === 'Expense').reduce((a,b) => a + Number(b.amount), 0);
+            document.getElementById('finance-total-income').innerText = `${db.config.currency} ${income.toLocaleString()}`;
+            document.getElementById('finance-total-expense').innerText = `${db.config.currency} ${expense.toLocaleString()}`;
+            document.getElementById('finance-net-balance').innerText = `${db.config.currency} ${(income - expense).toLocaleString()}`;
+
+            applyRolePermissions();
+        }
+
+        function openAddTransactionModal() {
+            if (!requireAdmin('add financial entries')) return;
+            document.getElementById('form-finance').reset(); document.getElementById('fin-edit-id').value = '';
+            document.querySelector('#modal-finance h3').innerText = 'Add Financial Transaction'; openModal('modal-finance');
+        }
+        function editTransaction(id) {
+            if (!requireAdmin('edit financial entries')) return;
+            const f = db.finance.find(x => x.id === id); if (!f) return;
+            document.getElementById('fin-edit-id').value = f.id; document.getElementById('fin-type').value = f.type;
+            document.getElementById('fin-desc').value = f.desc; document.getElementById('fin-category').value = f.category || '';
+            document.getElementById('fin-amount').value = f.amount; document.querySelector('#modal-finance h3').innerText = 'Edit Financial Transaction'; openModal('modal-finance');
+        }
+
+        function handleSaveTransaction(e) {
+            e.preventDefault();
+            if (!requireAdmin('change accounts')) return;
+            
+            const editId = document.getElementById('fin-edit-id').value;
+            const data = {
+                id: editId || 'f_' + Date.now(), date: editId ? (db.finance.find(x => x.id === editId)?.date || new Date().toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
+                type: document.getElementById('fin-type').value, desc: document.getElementById('fin-desc').value,
+                category: document.getElementById('fin-category').value || 'General', amount: Number(document.getElementById('fin-amount').value)
+            };
+            if (editId) { const idx = db.finance.findIndex(x => x.id === editId); if (idx >= 0) db.finance[idx] = data; } else db.finance.push(data);
+            saveDB();
+            closeModal('modal-finance');
+            showToast(editId ? "Financial entry updated!" : "Financial entry posted!");
+        }
+
+        function deleteTransaction(id) {
+            if (!requireAdmin('delete transactions')) return;
+            if (confirm("Delete this financial transaction?")) {
+                db.finance = db.finance.filter(x => x.id !== id);
+                saveDB();
+                showToast("Transaction removed");
+            }
+        }
+
+        // EVENTS & BUDGETS
+        function renderEventsGrid() {
+            const grid = document.getElementById('events-grid');
+            grid.innerHTML = db.events.map(ev => {
+                const budget = Number(ev.budget);
+                const spent = Number(ev.spent || 0);
+                const balance = budget - spent;
+                const pct = Math.min(100, Math.round((spent / budget) * 100));
+
+                return `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-brand-50 text-brand-700 font-bold text-xs rounded-lg">${ev.date}</span>
+                            <button onclick="editEvent('${ev.id}')" class="admin-only p-1 text-brand-600" title="Edit event">Edit</button>
+                            <button onclick="deleteEvent('${ev.id}')" class="admin-only p-1 text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">${ev.title}</h4>
+                        
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-500">Budget Spent: ${db.config.currency} ${spent.toLocaleString()}</span>
+                                <span class="font-bold text-slate-700">${pct}%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2">
+                                <div class="bg-brand-500 h-2 rounded-full" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+                            <div>Total Budget: <span class="font-bold text-slate-800">${db.config.currency} ${budget.toLocaleString()}</span></div>
+                            <div>Balance: <span class="font-bold text-emerald-600">${db.config.currency} ${balance.toLocaleString()}</span></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            applyRolePermissions();
+        }
+
+        function openAddEventModal() {
+            if (!requireAdmin('add events')) return;
+            document.getElementById('form-event').reset(); document.getElementById('event-edit-id').value = '';
+            document.querySelector('#modal-event h3').innerText = 'Create Institute Event'; openModal('modal-event');
+        }
+        function editEvent(id) {
+            if (!requireAdmin('edit events')) return;
+            const ev = db.events.find(x => x.id === id); if (!ev) return;
+            document.getElementById('event-edit-id').value = ev.id; document.getElementById('event-title').value = ev.title;
+            document.getElementById('event-date').value = ev.date; document.getElementById('event-budget').value = ev.budget;
+            document.querySelector('#modal-event h3').innerText = 'Edit Institute Event'; openModal('modal-event');
+        }
+        function handleSaveEvent(e) {
+            e.preventDefault(); if (!requireAdmin('change events')) return;
+            const editId = document.getElementById('event-edit-id').value;
+            const eventData = { id: editId || 'e_' + Date.now(), title: document.getElementById('event-title').value,
+                date: document.getElementById('event-date').value, budget: Number(document.getElementById('event-budget').value),
+                spent: editId ? Number(db.events.find(x => x.id === editId)?.spent || 0) : 0 };
+            if (editId) { const idx = db.events.findIndex(x => x.id === editId); if (idx >= 0) db.events[idx] = eventData; } else db.events.push(eventData);
+            saveDB(); closeModal('modal-event'); showToast(editId ? 'Event updated!' : 'Event created successfully!');
+        }
+
+        function deleteEvent(id) {
+            if (!requireAdmin('delete events')) return;
+            if (confirm("Delete event entry?")) {
+                db.events = db.events.filter(x => x.id !== id);
+                saveDB();
+                showToast("Event deleted");
+            }
+        }
+
+        // COURIER LOGISTICS
+        function renderCourierTable() {
+            const tbody = document.getElementById('courier-table-body');
+            tbody.innerHTML = db.couriers.map(c => {
+                const student = db.students.find(s => s.id === c.studentId) || { name: "Unknown", phone: "-" };
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-4 font-mono font-bold text-brand-600">${c.waybill}</td>
+                        <td class="p-4">
+                            <div class="font-bold text-slate-800">${student.name}</div>
+                            <div class="text-[11px] text-slate-400">${student.phone}</div>
+                        </td>
+                        <td class="p-4 text-slate-600">${c.items}</td>
+                        <td class="p-4"><span class="px-2 py-0.5 bg-slate-100 rounded-md font-semibold text-[11px]">${c.service}</span></td>
+                        <td class="p-4">
+                            <select onchange="updateCourierStatus('${c.id}', this.value)" class="text-xs border border-slate-200 rounded-lg p-1 bg-white font-semibold">
+                                <option value="In Transit" ${c.status === 'In Transit' ? 'selected' : ''}>In Transit</option>
+                                <option value="Dispatched" ${c.status === 'Dispatched' ? 'selected' : ''}>Dispatched</option>
+                                <option value="Delivered" ${c.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            </select>
+                        </td>
+                        <td class="p-4 text-right">
+                            <button onclick="editCourier('${c.id}')" class="admin-only p-1.5 text-brand-600" title="Edit courier">Edit</button>
+                            <button onclick="deleteCourier('${c.id}')" class="admin-only p-1.5 text-slate-500 hover:text-rose-600 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            applyRolePermissions();
+        }
+
+        function updateCourierStatus(id, newStatus) {
+            if (!requireAdmin('change courier status')) { renderCourierTable(); return; }
+            const idx = db.couriers.findIndex(x => x.id === id);
+            if (idx !== -1) { db.couriers[idx].status = newStatus; saveDB(); showToast('Courier status updated!'); }
+        }
+        function openAddCourierModal() {
+            if (!requireAdmin('add courier records')) return;
+            document.getElementById('form-courier').reset(); document.getElementById('courier-edit-id').value = '';
+            document.querySelector('#modal-courier h3').innerText = 'Create Courier Shipment'; openModal('modal-courier');
+        }
+        function editCourier(id) {
+            if (!requireAdmin('edit courier records')) return;
+            const c = db.couriers.find(x => x.id === id); if (!c) return;
+            document.getElementById('courier-edit-id').value = c.id; document.getElementById('courier-waybill').value = c.waybill;
+            document.getElementById('courier-student-id').value = c.studentId; document.getElementById('courier-items').value = c.items;
+            document.getElementById('courier-service').value = c.service || ''; document.querySelector('#modal-courier h3').innerText = 'Edit Courier Shipment'; openModal('modal-courier');
+        }
+        function handleSaveCourier(e) {
+            e.preventDefault(); if (!requireAdmin('change courier records')) return;
+            const editId = document.getElementById('courier-edit-id').value;
+            const courierData = { id: editId || 'cr_' + Date.now(), waybill: document.getElementById('courier-waybill').value,
+                studentId: document.getElementById('courier-student-id').value, items: document.getElementById('courier-items').value,
+                service: document.getElementById('courier-service').value || 'Express Post', status: editId ? (db.couriers.find(x => x.id === editId)?.status || 'In Transit') : 'In Transit' };
+            if (editId) { const idx = db.couriers.findIndex(x => x.id === editId); if (idx >= 0) db.couriers[idx] = courierData; } else db.couriers.push(courierData);
+            saveDB(); closeModal('modal-courier'); showToast(editId ? 'Courier record updated!' : 'Waybill recorded!');
+        }
+
+        function deleteCourier(id) {
+            if (!requireAdmin('delete courier records')) return;
+            if (confirm("Delete courier record?")) {
+                db.couriers = db.couriers.filter(x => x.id !== id);
+                saveDB();
+                showToast("Record removed");
+            }
+        }
+
+        // FILE HUB
+        function renderFilesGrid() {
+            const grid = document.getElementById('files-grid');
+            grid.innerHTML = db.files.map(f => `
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-start justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg font-bold">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </div>
+                        <button onclick="deleteFile('${f.id}')" class="admin-only p-1 text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-xs truncate" title="${f.name}">${f.name}</h4>
+                        <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                            <span>${f.category}</span>
+                            <span>${f.size}</span>
+                        </div>
+                    </div>
+                    <button onclick="downloadStoredFile('${f.id}')" class="w-full py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold transition">
+                        <i class="fa-solid fa-download mr-1"></i> Download File
+                    </button>
+                </div>
+            `).join('');
+            applyRolePermissions();
+        }
+
+        function openUploadFileModal() {
+            document.getElementById('form-upload').reset();
+            openModal('modal-upload');
+        }
+
+        async function handleSaveFile(e) {
+            e.preventDefault();
+            if (!requireAdmin('upload files')) return;
+            
+            const input = document.getElementById('file-attachment');
+            const file = input.files && input.files[0];
+            if (!file) { showToast('Please choose a file to upload.', 'error'); return; }
+            if (file.size > 1500000) { showToast('For this offline demo, choose a file smaller than 1.5 MB.', 'error'); return; }
+            const dataUrl = await new Promise((resolve, reject) => {
+                const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file);
+            });
+            db.files.push({ id: 'fl_' + Date.now(), name: document.getElementById('file-name').value || file.name,
+                category: document.getElementById('file-category').value, size: (file.size/1024).toFixed(1) + ' KB',
+                date: new Date().toISOString().split('T')[0], mime: file.type || 'application/octet-stream', dataUrl });
+            try { saveDB(); closeModal('modal-upload'); showToast('File uploaded and stored in this browser.'); }
+            catch (err) { showToast('Storage is full. Download a backup or use a smaller file.', 'error'); }
+        }
+        function downloadStoredFile(id) {
+            const f = db.files.find(x => x.id === id);
+            if (!f) return showToast('File not found.', 'error');
+            if (!f.dataUrl) return showToast('This is an old demo placeholder, not an actual uploaded file.', 'error');
+            const a = document.createElement('a'); a.href = f.dataUrl; a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+        }
+
+        function deleteFile(id) {
+            if (!requireAdmin('delete files')) return;
+            if (confirm("Delete document?")) {
+                db.files = db.files.filter(x => x.id !== id);
+                saveDB();
+                showToast("File deleted");
+            }
+        }
+
+        // CONFIG & USERS MANAGEMENT
+        function switchConfigSubTab(tab) {
+            document.querySelectorAll('.cfg-sub-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('#tab-settings button').forEach(el => {
+                el.classList.remove('text-brand-600', 'border-brand-600');
+                el.classList.add('text-slate-500', 'border-transparent');
+            });
+
+            document.getElementById(`cfg-sub-${tab}`).classList.remove('hidden');
+            const btn = document.getElementById(`cfg-btn-${tab}`);
+            btn.classList.remove('text-slate-500', 'border-transparent');
+            btn.classList.add('text-brand-600', 'border-brand-600');
+        }
+
+        function saveGeneralConfig() {
+            if (!requireAdmin('change system settings')) return;
+            db.config.companyName = document.getElementById('cfg-company-name').value;
+            db.config.subtitle = document.getElementById('cfg-company-subtitle').value;
+            db.config.currency = document.getElementById('cfg-currency-symbol').value;
+            db.config.contactPhone = document.getElementById('cfg-contact-phone').value;
+            saveDB();
+            showToast("Branding saved!");
+        }
+
+        function saveThresholdsConfig() {
+            if (!requireAdmin('change exam criteria')) return;
+            db.config.thresholds.gold = Number(document.getElementById('cfg-gold-mark').value);
+            db.config.thresholds.silver = Number(document.getElementById('cfg-silver-mark').value);
+            db.config.thresholds.bronze = Number(document.getElementById('cfg-bronze-mark').value);
+            saveDB();
+            showToast("Exam medal criteria updated!");
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = db.users.map(u => `
+                <tr>
+                    <td class="p-3 font-bold text-slate-800">${u.name}</td>
+                    <td class="p-3">${u.username || ''}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 rounded-md font-semibold">${u.role}</span></td>
+                    <td class="p-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full font-bold text-[10px]">Active</span></td>
+                    <td class="p-3 text-right">
+                        <button onclick="editUser('${u.id}')" class="admin-only p-1 text-brand-600" title="Edit user">Edit</button>
+                        <button onclick="deleteUser('${u.id}')" class="admin-only p-1 text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        let editingUserId = null;
+        function openAddUserModal() {
+            if (!requireAdmin('add users')) return;
+            editingUserId = null;
+            document.getElementById('form-user').reset();
+            document.querySelector('#modal-user h3').innerText = 'Add System Staff User';
+            document.getElementById('usr-password').required = true;
+            openModal('modal-user');
+        }
+        function editUser(id) {
+            if (!requireAdmin('edit users')) return;
+            const u = db.users.find(x => x.id === id); if (!u) return;
+            editingUserId = id;
+            document.getElementById('usr-name').value = u.name || '';
+            document.getElementById('usr-username').value = u.username || '';
+            document.getElementById('usr-password').value = '';
+            document.getElementById('usr-password').required = false;
+            document.getElementById('usr-role').value = u.role || 'Staff';
+            document.querySelector('#modal-user h3').innerText = 'Edit System User';
+            openModal('modal-user');
+        }
+        function handleSaveUser(e) {
+            e.preventDefault();
+            if (!requireAdmin('manage users')) return;
+            const name = document.getElementById('usr-name').value.trim();
+            const username = document.getElementById('usr-username').value.trim().toLowerCase();
+            const password = document.getElementById('usr-password').value;
+            const role = document.getElementById('usr-role').value;
+            if (db.users.some(u => String(u.username || '').toLowerCase() === username && u.id !== editingUserId)) { showToast('That username is already in use.', 'error'); return; }
+            if (!editingUserId && !password) { showToast('Enter a password for the new user.', 'error'); return; }
+            if (password && password.length < 8) { showToast('Use a password with at least 8 characters.', 'error'); return; }
+            if (editingUserId) {
+                const u = db.users.find(x => x.id === editingUserId); if (!u) return;
+                u.name = name; u.username = username; u.role = role; if (password) u.password = password;
+                if (authenticatedUser && authenticatedUser.id === u.id) { authenticatedUser = {id:u.id,name:u.name,username:u.username,role:u.role}; db.currentUserRole = role; }
+            } else {
+                db.users.push({ id: 'u_' + Date.now(), name, username, password, role });
+            }
+            saveDB(); closeModal('modal-user'); showToast(editingUserId ? 'User updated.' : 'User added.'); editingUserId = null;
+        }
+        function deleteUser(id) {
+            if (!requireAdmin('delete users')) return;
+            if (id === (authenticatedUser && authenticatedUser.id)) { showToast('You cannot delete the account currently signed in.', 'error'); return; }
+            if (db.users.filter(u => u.role === 'Admin').length <= 1 && db.users.find(u=>u.id===id)?.role === 'Admin') { showToast('Keep at least one Admin account.', 'error'); return; }
+            if (confirm('Remove user access?')) { db.users = db.users.filter(x => x.id !== id); saveDB(); showToast('User removed'); }
+        }
+
+                function exportFullJSON() {
+            if (!requireAdmin('export a full backup')) return;
+            const jsonStr = JSON.stringify(db, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Acumen_ERP_Backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function importFullJSON(event) {
+            if (!requireAdmin('import a backup')) return;
+            const file = event.target.files && event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => { try {
+                const incoming = JSON.parse(reader.result);
+                const required = ['config','courses','students','inventory','finance','events','couriers','files','users'];
+                if (!incoming || !required.every(k => k in incoming)) throw new Error('Invalid backup structure');
+                if (!confirm('Import will replace the current browser data. Continue?')) return;
+                db = incoming; saveDB(); showToast('Backup imported successfully.');
+            } catch (err) { showToast('Invalid JSON backup file.', 'error'); } finally { event.target.value = ''; } };
+            reader.readAsText(file);
+        }
+
+        function resetToDemoData() {
+            if (!requireAdmin('reset system data')) return;
+            if (confirm("Reset system back to factory demo state? All custom changes will be overwritten.")) {
+                db = JSON.parse(JSON.stringify(INITIAL_STATE));
+                saveDB();
+                showToast("Factory demo dataset restored!");
+            }
+        }
+
+        // SIDEBAR TOGGLE MOBILE
+        function toggleSidebar(forceOpen) {
+            const sb = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (!sb) return;
+            if (window.matchMedia('(max-width: 700px)').matches) {
+                const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !sb.classList.contains('mobile-sidebar-open');
+                sb.classList.toggle('mobile-sidebar-open', shouldOpen);
+                if (backdrop) backdrop.classList.toggle('is-visible', shouldOpen);
+                document.body.classList.toggle('sidebar-is-open', shouldOpen);
+            } else {
+                sb.classList.toggle('desktop-sidebar-collapsed');
+            }
+        }
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 700) {
+                const sb = document.getElementById('sidebar');
+                const backdrop = document.getElementById('sidebar-backdrop');
+                if (sb) sb.classList.remove('mobile-sidebar-open');
+                if (backdrop) backdrop.classList.remove('is-visible');
+                document.body.classList.remove('sidebar-is-open');
+            }
+        });
+
+        // INITIAL LOAD
+        window.onload = function() {
+            switchTab('dashboard');
+            refreshUI();
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('current-year').innerText = new Date().getFullYear();
+            updateConnectionStatus();
+            window.addEventListener('online', updateConnectionStatus);
+            window.addEventListener('offline', updateConnectionStatus);
+            const saved = document.getElementById('last-saved-label');
+            if (saved && db.meta && db.meta.lastSavedAt) saved.textContent = 'Saved locally ' + new Date(db.meta.lastSavedAt).toLocaleString();
+        };
+    </script>
+</body>
+</html>
